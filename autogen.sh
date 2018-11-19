@@ -1,3 +1,4 @@
+#!/bin/sh
 # Copyright (c) 2018 TK Chia
 #
 # This file is free software; you can redistribute it and/or modify it
@@ -14,20 +15,7 @@
 # along with this program; see the file COPYING3.LIB.  If not see
 # <http://www.gnu.org/licenses/>.
 
-srcdir = @srcdir@
-
-default: all
-.PHONY: default
-
-distclean maintainer-clean:
-	$(MAKE) -C ia16 $@
-	$(RM) Makefile config.cache config.log config.status
-.PHONY: distclean maintainer-clean
-
-check check-local:
-	exec $(srcdir)/tests/testsuite $(TESTSUITEFLAGS)
-.PHONY: check check-local
-
-%:
-	$(MAKE) -C ia16 $@
-.PHONY: %
+echo "PATH=$PATH"
+find -name configure.ac -type f -print -execdir autoconf \;
+find -name testsuite.at -type f -print \
+  -execdir autom4te --language=autotest -o testsuite testsuite.at \;
