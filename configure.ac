@@ -24,12 +24,13 @@ dnl the test suite runs, using the GNU Autotools' experimental Autotest
 dnl feature.	-- tkchia 20181118
 
 AC_PREREQ(2.69)
-AC_INIT([libi86],m4_esyscmd_s([git log -n1 --oneline --date=short-local \
-  --format='%ad' | sed 's/-//g']),,[libi86])
+AC_INIT([libi86],m4_esyscmd_s([TZ=UTC0 git log -n1 --oneline \
+  --date=short-local --format='%ad' | sed 's/-//g']),,[libi86])
 AC_CANONICAL_BUILD
 AC_CANONICAL_HOST
-AC_CONFIG_SUBDIRS([ia16])
+AC_PROG_CC
 AC_PATH_PROG(DOSEMU, dosemu, /bin/false)
+AC_CONFIG_SUBDIRS([ia16])
 AC_CONFIG_TESTDIR([tests])
 AC_CONFIG_FILES([Makefile tests/atlocal])
 AC_OUTPUT

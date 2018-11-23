@@ -590,7 +590,9 @@ at_tested=''
 # numerical order.
 at_format='?'
 # Description of all the test groups.
-at_help_all=""
+at_help_all="1;testsuite.at:20;Basic sanity meta-checks on the GCC toolchain;;
+2;testsuite.at:34;<i86.h> tests;;
+"
 # List of the all the test groups.
 at_groups_all=`$as_echo "$at_help_all" | sed 's/;.*//'`
 
@@ -603,7 +605,7 @@ at_fn_validate_ranges ()
   for at_grp
   do
     eval at_value=\$$at_grp
-    if test $at_value -lt 1 || test $at_value -gt 0; then
+    if test $at_value -lt 1 || test $at_value -gt 2; then
       $as_echo "invalid test group: $at_value" >&2
       exit 1
     fi
@@ -901,7 +903,7 @@ fi
 # List of tests.
 if $at_list_p; then
   cat <<_ATEOF || at_write_fail=1
-libi86 20181119 test suite: libi86 test groups:
+libi86 20181124 test suite: libi86 test groups:
 
  NUM: FILE-NAME:LINE     TEST-GROUP-NAME
       KEYWORDS
@@ -942,7 +944,7 @@ _ATEOF
   exit $at_write_fail
 fi
 if $at_version_p; then
-  $as_echo "$as_me (libi86 20181119)" &&
+  $as_echo "$as_me (libi86 20181124)" &&
   cat <<\_ATEOF || at_write_fail=1
 
 Copyright (C) 2012 Free Software Foundation, Inc.
@@ -1119,11 +1121,11 @@ exec 5>>"$at_suite_log"
 
 # Banners and logs.
 $as_echo "## ----------------------------------- ##
-## libi86 20181119 test suite: libi86. ##
+## libi86 20181124 test suite: libi86. ##
 ## ----------------------------------- ##"
 {
   $as_echo "## ----------------------------------- ##
-## libi86 20181119 test suite: libi86. ##
+## libi86 20181124 test suite: libi86. ##
 ## ----------------------------------- ##"
   echo
 
@@ -1967,7 +1969,7 @@ _ASBOX
   $as_echo "Please send $at_msg and all information you think might help:
 
    To: <https://github.com/tkchia/libi86/issues>
-   Subject: [libi86 20181119] $as_me: $at_fail_list${at_fail_list:+ failed${at_xpass_list:+, }}$at_xpass_list${at_xpass_list:+ passed unexpectedly}
+   Subject: [libi86 20181124] $as_me: $at_fail_list${at_fail_list:+ failed${at_xpass_list:+, }}$at_xpass_list${at_xpass_list:+ passed unexpectedly}
 
 You may investigate any problem if you feel able to do so, in which
 case the test suite provides a good starting point.  Its output may
@@ -1981,3 +1983,2130 @@ exit 0
 ## ------------- ##
 ## Actual tests. ##
 ## ------------- ##
+#AT_START_1
+at_fn_group_banner 1 'testsuite.at:20' \
+  "Basic sanity meta-checks on the GCC toolchain" "  "
+at_xfail=no
+(
+  $as_echo "1. $at_setup_line: testing $at_desc ..."
+  $at_traceon
+
+{ set +x
+$as_echo "$at_srcdir/testsuite.at:21: \$CC --version -v"
+at_fn_check_prepare_dynamic "$CC --version -v" "testsuite.at:21"
+( $at_check_trace; $CC --version -v
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/testsuite.at:21"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+cat >a.c <<'_ATEOF'
+#if ! defined __ia16__
+# error
+#endif
+
+int main (void)
+{
+  return 0;
+}
+_ATEOF
+
+at_libi86_multilib="`$CC -O2  -print-multi-directory`"
+{ set +x
+$as_echo "$at_srcdir/testsuite.at:22: \$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -O2  a.c \"\$abs_top_builddir\"/\"\$at_libi86_multilib\"/ia16/libi86.a"
+at_fn_check_prepare_dynamic "$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -O2  a.c \"$abs_top_builddir\"/\"$at_libi86_multilib\"/ia16/libi86.a" "testsuite.at:22"
+( $at_check_trace; $CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -O2  a.c "$abs_top_builddir"/"$at_libi86_multilib"/ia16/libi86.a
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/testsuite.at:22"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+cat >a.c <<'_ATEOF'
+#if ! defined __ia16__
+# error
+#endif
+
+int main (void)
+{
+  return 0;
+}
+_ATEOF
+
+at_libi86_multilib="`$CC -march=any_186 -O2  -print-multi-directory`"
+{ set +x
+$as_echo "$at_srcdir/testsuite.at:22: \$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -O2  a.c \"\$abs_top_builddir\"/\"\$at_libi86_multilib\"/ia16/libi86.a"
+at_fn_check_prepare_dynamic "$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -O2  a.c \"$abs_top_builddir\"/\"$at_libi86_multilib\"/ia16/libi86.a" "testsuite.at:22"
+( $at_check_trace; $CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -O2  a.c "$abs_top_builddir"/"$at_libi86_multilib"/ia16/libi86.a
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/testsuite.at:22"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+cat >a.c <<'_ATEOF'
+#if ! defined __ia16__
+# error
+#endif
+
+int main (void)
+{
+  return 0;
+}
+_ATEOF
+
+at_libi86_multilib="`$CC -Os  -print-multi-directory`"
+{ set +x
+$as_echo "$at_srcdir/testsuite.at:22: \$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -Os  a.c \"\$abs_top_builddir\"/\"\$at_libi86_multilib\"/ia16/libi86.a"
+at_fn_check_prepare_dynamic "$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -Os  a.c \"$abs_top_builddir\"/\"$at_libi86_multilib\"/ia16/libi86.a" "testsuite.at:22"
+( $at_check_trace; $CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -Os  a.c "$abs_top_builddir"/"$at_libi86_multilib"/ia16/libi86.a
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/testsuite.at:22"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+cat >a.c <<'_ATEOF'
+#if ! defined __ia16__
+# error
+#endif
+
+int main (void)
+{
+  return 0;
+}
+_ATEOF
+
+at_libi86_multilib="`$CC -march=any_186 -Os  -print-multi-directory`"
+{ set +x
+$as_echo "$at_srcdir/testsuite.at:22: \$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -Os  a.c \"\$abs_top_builddir\"/\"\$at_libi86_multilib\"/ia16/libi86.a"
+at_fn_check_prepare_dynamic "$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -Os  a.c \"$abs_top_builddir\"/\"$at_libi86_multilib\"/ia16/libi86.a" "testsuite.at:22"
+( $at_check_trace; $CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -Os  a.c "$abs_top_builddir"/"$at_libi86_multilib"/ia16/libi86.a
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/testsuite.at:22"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+cat >a.c <<'_ATEOF'
+#if ! defined __ia16__
+# error
+#endif
+
+int main (void)
+{
+  return 0;
+}
+_ATEOF
+
+at_libi86_multilib="`$CC -O2 -fno-omit-frame-pointer  -print-multi-directory`"
+{ set +x
+$as_echo "$at_srcdir/testsuite.at:22: \$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -O2 -fno-omit-frame-pointer  a.c \"\$abs_top_builddir\"/\"\$at_libi86_multilib\"/ia16/libi86.a"
+at_fn_check_prepare_dynamic "$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -O2 -fno-omit-frame-pointer  a.c \"$abs_top_builddir\"/\"$at_libi86_multilib\"/ia16/libi86.a" "testsuite.at:22"
+( $at_check_trace; $CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -O2 -fno-omit-frame-pointer  a.c "$abs_top_builddir"/"$at_libi86_multilib"/ia16/libi86.a
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/testsuite.at:22"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+cat >a.c <<'_ATEOF'
+#if ! defined __ia16__
+# error
+#endif
+
+int main (void)
+{
+  return 0;
+}
+_ATEOF
+
+at_libi86_multilib="`$CC -march=any_186 -O2 -fno-omit-frame-pointer  -print-multi-directory`"
+{ set +x
+$as_echo "$at_srcdir/testsuite.at:22: \$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -O2 -fno-omit-frame-pointer  a.c \"\$abs_top_builddir\"/\"\$at_libi86_multilib\"/ia16/libi86.a"
+at_fn_check_prepare_dynamic "$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -O2 -fno-omit-frame-pointer  a.c \"$abs_top_builddir\"/\"$at_libi86_multilib\"/ia16/libi86.a" "testsuite.at:22"
+( $at_check_trace; $CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -O2 -fno-omit-frame-pointer  a.c "$abs_top_builddir"/"$at_libi86_multilib"/ia16/libi86.a
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/testsuite.at:22"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+cat >a.c <<'_ATEOF'
+#if ! defined __ia16__
+# error
+#endif
+
+int main (void)
+{
+  return 0;
+}
+_ATEOF
+
+at_libi86_multilib="`$CC -O2 -mrtd  -print-multi-directory`"
+{ set +x
+$as_echo "$at_srcdir/testsuite.at:22: \$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -O2 -mrtd  a.c \"\$abs_top_builddir\"/\"\$at_libi86_multilib\"/ia16/libi86.a"
+at_fn_check_prepare_dynamic "$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -O2 -mrtd  a.c \"$abs_top_builddir\"/\"$at_libi86_multilib\"/ia16/libi86.a" "testsuite.at:22"
+( $at_check_trace; $CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -O2 -mrtd  a.c "$abs_top_builddir"/"$at_libi86_multilib"/ia16/libi86.a
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/testsuite.at:22"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+cat >a.c <<'_ATEOF'
+#if ! defined __ia16__
+# error
+#endif
+
+int main (void)
+{
+  return 0;
+}
+_ATEOF
+
+at_libi86_multilib="`$CC -march=any_186 -O2 -mrtd  -print-multi-directory`"
+{ set +x
+$as_echo "$at_srcdir/testsuite.at:22: \$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -O2 -mrtd  a.c \"\$abs_top_builddir\"/\"\$at_libi86_multilib\"/ia16/libi86.a"
+at_fn_check_prepare_dynamic "$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -O2 -mrtd  a.c \"$abs_top_builddir\"/\"$at_libi86_multilib\"/ia16/libi86.a" "testsuite.at:22"
+( $at_check_trace; $CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -O2 -mrtd  a.c "$abs_top_builddir"/"$at_libi86_multilib"/ia16/libi86.a
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/testsuite.at:22"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+cat >a.c <<'_ATEOF'
+#if ! defined __ia16__
+# error
+#endif
+
+int main (void)
+{
+  return 0;
+}
+_ATEOF
+
+at_libi86_multilib="`$CC -Os -mrtd  -print-multi-directory`"
+{ set +x
+$as_echo "$at_srcdir/testsuite.at:22: \$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -Os -mrtd  a.c \"\$abs_top_builddir\"/\"\$at_libi86_multilib\"/ia16/libi86.a"
+at_fn_check_prepare_dynamic "$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -Os -mrtd  a.c \"$abs_top_builddir\"/\"$at_libi86_multilib\"/ia16/libi86.a" "testsuite.at:22"
+( $at_check_trace; $CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -Os -mrtd  a.c "$abs_top_builddir"/"$at_libi86_multilib"/ia16/libi86.a
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/testsuite.at:22"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+cat >a.c <<'_ATEOF'
+#if ! defined __ia16__
+# error
+#endif
+
+int main (void)
+{
+  return 0;
+}
+_ATEOF
+
+at_libi86_multilib="`$CC -march=any_186 -Os -mrtd  -print-multi-directory`"
+{ set +x
+$as_echo "$at_srcdir/testsuite.at:22: \$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -Os -mrtd  a.c \"\$abs_top_builddir\"/\"\$at_libi86_multilib\"/ia16/libi86.a"
+at_fn_check_prepare_dynamic "$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -Os -mrtd  a.c \"$abs_top_builddir\"/\"$at_libi86_multilib\"/ia16/libi86.a" "testsuite.at:22"
+( $at_check_trace; $CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -Os -mrtd  a.c "$abs_top_builddir"/"$at_libi86_multilib"/ia16/libi86.a
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/testsuite.at:22"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+cat >a.c <<'_ATEOF'
+#if ! defined __ia16__
+# error
+#endif
+
+int main (void)
+{
+  return 0;
+}
+_ATEOF
+
+at_libi86_multilib="`$CC -O2 -fno-omit-frame-pointer -mrtd  -print-multi-directory`"
+{ set +x
+$as_echo "$at_srcdir/testsuite.at:22: \$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -O2 -fno-omit-frame-pointer -mrtd  a.c \"\$abs_top_builddir\"/\"\$at_libi86_multilib\"/ia16/libi86.a"
+at_fn_check_prepare_dynamic "$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -O2 -fno-omit-frame-pointer -mrtd  a.c \"$abs_top_builddir\"/\"$at_libi86_multilib\"/ia16/libi86.a" "testsuite.at:22"
+( $at_check_trace; $CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -O2 -fno-omit-frame-pointer -mrtd  a.c "$abs_top_builddir"/"$at_libi86_multilib"/ia16/libi86.a
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/testsuite.at:22"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+cat >a.c <<'_ATEOF'
+#if ! defined __ia16__
+# error
+#endif
+
+int main (void)
+{
+  return 0;
+}
+_ATEOF
+
+at_libi86_multilib="`$CC -march=any_186 -O2 -fno-omit-frame-pointer -mrtd  -print-multi-directory`"
+{ set +x
+$as_echo "$at_srcdir/testsuite.at:22: \$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -O2 -fno-omit-frame-pointer -mrtd  a.c \"\$abs_top_builddir\"/\"\$at_libi86_multilib\"/ia16/libi86.a"
+at_fn_check_prepare_dynamic "$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -O2 -fno-omit-frame-pointer -mrtd  a.c \"$abs_top_builddir\"/\"$at_libi86_multilib\"/ia16/libi86.a" "testsuite.at:22"
+( $at_check_trace; $CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -O2 -fno-omit-frame-pointer -mrtd  a.c "$abs_top_builddir"/"$at_libi86_multilib"/ia16/libi86.a
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/testsuite.at:22"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+cat >a.c <<'_ATEOF'
+#if ! defined __ia16__
+# error
+#endif
+
+int main (void)
+{
+  return 0;
+}
+_ATEOF
+
+at_libi86_multilib="`$CC -O2 -mregparmcall  -print-multi-directory`"
+{ set +x
+$as_echo "$at_srcdir/testsuite.at:22: \$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -O2 -mregparmcall  a.c \"\$abs_top_builddir\"/\"\$at_libi86_multilib\"/ia16/libi86.a"
+at_fn_check_prepare_dynamic "$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -O2 -mregparmcall  a.c \"$abs_top_builddir\"/\"$at_libi86_multilib\"/ia16/libi86.a" "testsuite.at:22"
+( $at_check_trace; $CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -O2 -mregparmcall  a.c "$abs_top_builddir"/"$at_libi86_multilib"/ia16/libi86.a
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/testsuite.at:22"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+cat >a.c <<'_ATEOF'
+#if ! defined __ia16__
+# error
+#endif
+
+int main (void)
+{
+  return 0;
+}
+_ATEOF
+
+at_libi86_multilib="`$CC -march=any_186 -O2 -mregparmcall  -print-multi-directory`"
+{ set +x
+$as_echo "$at_srcdir/testsuite.at:22: \$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -O2 -mregparmcall  a.c \"\$abs_top_builddir\"/\"\$at_libi86_multilib\"/ia16/libi86.a"
+at_fn_check_prepare_dynamic "$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -O2 -mregparmcall  a.c \"$abs_top_builddir\"/\"$at_libi86_multilib\"/ia16/libi86.a" "testsuite.at:22"
+( $at_check_trace; $CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -O2 -mregparmcall  a.c "$abs_top_builddir"/"$at_libi86_multilib"/ia16/libi86.a
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/testsuite.at:22"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+cat >a.c <<'_ATEOF'
+#if ! defined __ia16__
+# error
+#endif
+
+int main (void)
+{
+  return 0;
+}
+_ATEOF
+
+at_libi86_multilib="`$CC -Os -mregparmcall  -print-multi-directory`"
+{ set +x
+$as_echo "$at_srcdir/testsuite.at:22: \$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -Os -mregparmcall  a.c \"\$abs_top_builddir\"/\"\$at_libi86_multilib\"/ia16/libi86.a"
+at_fn_check_prepare_dynamic "$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -Os -mregparmcall  a.c \"$abs_top_builddir\"/\"$at_libi86_multilib\"/ia16/libi86.a" "testsuite.at:22"
+( $at_check_trace; $CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -Os -mregparmcall  a.c "$abs_top_builddir"/"$at_libi86_multilib"/ia16/libi86.a
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/testsuite.at:22"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+cat >a.c <<'_ATEOF'
+#if ! defined __ia16__
+# error
+#endif
+
+int main (void)
+{
+  return 0;
+}
+_ATEOF
+
+at_libi86_multilib="`$CC -march=any_186 -Os -mregparmcall  -print-multi-directory`"
+{ set +x
+$as_echo "$at_srcdir/testsuite.at:22: \$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -Os -mregparmcall  a.c \"\$abs_top_builddir\"/\"\$at_libi86_multilib\"/ia16/libi86.a"
+at_fn_check_prepare_dynamic "$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -Os -mregparmcall  a.c \"$abs_top_builddir\"/\"$at_libi86_multilib\"/ia16/libi86.a" "testsuite.at:22"
+( $at_check_trace; $CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -Os -mregparmcall  a.c "$abs_top_builddir"/"$at_libi86_multilib"/ia16/libi86.a
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/testsuite.at:22"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+cat >a.c <<'_ATEOF'
+#if ! defined __ia16__
+# error
+#endif
+
+int main (void)
+{
+  return 0;
+}
+_ATEOF
+
+at_libi86_multilib="`$CC -O2 -fno-omit-frame-pointer -mregparmcall  -print-multi-directory`"
+{ set +x
+$as_echo "$at_srcdir/testsuite.at:22: \$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -O2 -fno-omit-frame-pointer -mregparmcall  a.c \"\$abs_top_builddir\"/\"\$at_libi86_multilib\"/ia16/libi86.a"
+at_fn_check_prepare_dynamic "$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -O2 -fno-omit-frame-pointer -mregparmcall  a.c \"$abs_top_builddir\"/\"$at_libi86_multilib\"/ia16/libi86.a" "testsuite.at:22"
+( $at_check_trace; $CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -O2 -fno-omit-frame-pointer -mregparmcall  a.c "$abs_top_builddir"/"$at_libi86_multilib"/ia16/libi86.a
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/testsuite.at:22"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+cat >a.c <<'_ATEOF'
+#if ! defined __ia16__
+# error
+#endif
+
+int main (void)
+{
+  return 0;
+}
+_ATEOF
+
+at_libi86_multilib="`$CC -march=any_186 -O2 -fno-omit-frame-pointer -mregparmcall  -print-multi-directory`"
+{ set +x
+$as_echo "$at_srcdir/testsuite.at:22: \$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -O2 -fno-omit-frame-pointer -mregparmcall  a.c \"\$abs_top_builddir\"/\"\$at_libi86_multilib\"/ia16/libi86.a"
+at_fn_check_prepare_dynamic "$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -O2 -fno-omit-frame-pointer -mregparmcall  a.c \"$abs_top_builddir\"/\"$at_libi86_multilib\"/ia16/libi86.a" "testsuite.at:22"
+( $at_check_trace; $CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -O2 -fno-omit-frame-pointer -mregparmcall  a.c "$abs_top_builddir"/"$at_libi86_multilib"/ia16/libi86.a
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/testsuite.at:22"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+cat >a.c <<'_ATEOF'
+#if ! defined __ia16__
+# error
+#endif
+
+int main (void)
+{
+  return 0;
+}
+_ATEOF
+
+at_libi86_multilib="`$CC -O2 -mcmodel=small -print-multi-directory`"
+{ set +x
+$as_echo "$at_srcdir/testsuite.at:22: \$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -O2 -mcmodel=small a.c \"\$abs_top_builddir\"/\"\$at_libi86_multilib\"/ia16/libi86.a"
+at_fn_check_prepare_dynamic "$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -O2 -mcmodel=small a.c \"$abs_top_builddir\"/\"$at_libi86_multilib\"/ia16/libi86.a" "testsuite.at:22"
+( $at_check_trace; $CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -O2 -mcmodel=small a.c "$abs_top_builddir"/"$at_libi86_multilib"/ia16/libi86.a
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/testsuite.at:22"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+cat >a.c <<'_ATEOF'
+#if ! defined __ia16__
+# error
+#endif
+
+int main (void)
+{
+  return 0;
+}
+_ATEOF
+
+at_libi86_multilib="`$CC -march=any_186 -O2 -mcmodel=small -print-multi-directory`"
+{ set +x
+$as_echo "$at_srcdir/testsuite.at:22: \$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -O2 -mcmodel=small a.c \"\$abs_top_builddir\"/\"\$at_libi86_multilib\"/ia16/libi86.a"
+at_fn_check_prepare_dynamic "$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -O2 -mcmodel=small a.c \"$abs_top_builddir\"/\"$at_libi86_multilib\"/ia16/libi86.a" "testsuite.at:22"
+( $at_check_trace; $CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -O2 -mcmodel=small a.c "$abs_top_builddir"/"$at_libi86_multilib"/ia16/libi86.a
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/testsuite.at:22"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+cat >a.c <<'_ATEOF'
+#if ! defined __ia16__
+# error
+#endif
+
+int main (void)
+{
+  return 0;
+}
+_ATEOF
+
+at_libi86_multilib="`$CC -Os -mcmodel=small -print-multi-directory`"
+{ set +x
+$as_echo "$at_srcdir/testsuite.at:22: \$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -Os -mcmodel=small a.c \"\$abs_top_builddir\"/\"\$at_libi86_multilib\"/ia16/libi86.a"
+at_fn_check_prepare_dynamic "$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -Os -mcmodel=small a.c \"$abs_top_builddir\"/\"$at_libi86_multilib\"/ia16/libi86.a" "testsuite.at:22"
+( $at_check_trace; $CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -Os -mcmodel=small a.c "$abs_top_builddir"/"$at_libi86_multilib"/ia16/libi86.a
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/testsuite.at:22"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+cat >a.c <<'_ATEOF'
+#if ! defined __ia16__
+# error
+#endif
+
+int main (void)
+{
+  return 0;
+}
+_ATEOF
+
+at_libi86_multilib="`$CC -march=any_186 -Os -mcmodel=small -print-multi-directory`"
+{ set +x
+$as_echo "$at_srcdir/testsuite.at:22: \$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -Os -mcmodel=small a.c \"\$abs_top_builddir\"/\"\$at_libi86_multilib\"/ia16/libi86.a"
+at_fn_check_prepare_dynamic "$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -Os -mcmodel=small a.c \"$abs_top_builddir\"/\"$at_libi86_multilib\"/ia16/libi86.a" "testsuite.at:22"
+( $at_check_trace; $CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -Os -mcmodel=small a.c "$abs_top_builddir"/"$at_libi86_multilib"/ia16/libi86.a
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/testsuite.at:22"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+cat >a.c <<'_ATEOF'
+#if ! defined __ia16__
+# error
+#endif
+
+int main (void)
+{
+  return 0;
+}
+_ATEOF
+
+at_libi86_multilib="`$CC -O2 -fno-omit-frame-pointer -mcmodel=small -print-multi-directory`"
+{ set +x
+$as_echo "$at_srcdir/testsuite.at:22: \$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -O2 -fno-omit-frame-pointer -mcmodel=small a.c \"\$abs_top_builddir\"/\"\$at_libi86_multilib\"/ia16/libi86.a"
+at_fn_check_prepare_dynamic "$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -O2 -fno-omit-frame-pointer -mcmodel=small a.c \"$abs_top_builddir\"/\"$at_libi86_multilib\"/ia16/libi86.a" "testsuite.at:22"
+( $at_check_trace; $CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -O2 -fno-omit-frame-pointer -mcmodel=small a.c "$abs_top_builddir"/"$at_libi86_multilib"/ia16/libi86.a
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/testsuite.at:22"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+cat >a.c <<'_ATEOF'
+#if ! defined __ia16__
+# error
+#endif
+
+int main (void)
+{
+  return 0;
+}
+_ATEOF
+
+at_libi86_multilib="`$CC -march=any_186 -O2 -fno-omit-frame-pointer -mcmodel=small -print-multi-directory`"
+{ set +x
+$as_echo "$at_srcdir/testsuite.at:22: \$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -O2 -fno-omit-frame-pointer -mcmodel=small a.c \"\$abs_top_builddir\"/\"\$at_libi86_multilib\"/ia16/libi86.a"
+at_fn_check_prepare_dynamic "$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -O2 -fno-omit-frame-pointer -mcmodel=small a.c \"$abs_top_builddir\"/\"$at_libi86_multilib\"/ia16/libi86.a" "testsuite.at:22"
+( $at_check_trace; $CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -O2 -fno-omit-frame-pointer -mcmodel=small a.c "$abs_top_builddir"/"$at_libi86_multilib"/ia16/libi86.a
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/testsuite.at:22"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+cat >a.c <<'_ATEOF'
+#if ! defined __ia16__
+# error
+#endif
+
+int main (void)
+{
+  return 0;
+}
+_ATEOF
+
+at_libi86_multilib="`$CC -O2 -mrtd -mcmodel=small -print-multi-directory`"
+{ set +x
+$as_echo "$at_srcdir/testsuite.at:22: \$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -O2 -mrtd -mcmodel=small a.c \"\$abs_top_builddir\"/\"\$at_libi86_multilib\"/ia16/libi86.a"
+at_fn_check_prepare_dynamic "$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -O2 -mrtd -mcmodel=small a.c \"$abs_top_builddir\"/\"$at_libi86_multilib\"/ia16/libi86.a" "testsuite.at:22"
+( $at_check_trace; $CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -O2 -mrtd -mcmodel=small a.c "$abs_top_builddir"/"$at_libi86_multilib"/ia16/libi86.a
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/testsuite.at:22"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+cat >a.c <<'_ATEOF'
+#if ! defined __ia16__
+# error
+#endif
+
+int main (void)
+{
+  return 0;
+}
+_ATEOF
+
+at_libi86_multilib="`$CC -march=any_186 -O2 -mrtd -mcmodel=small -print-multi-directory`"
+{ set +x
+$as_echo "$at_srcdir/testsuite.at:22: \$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -O2 -mrtd -mcmodel=small a.c \"\$abs_top_builddir\"/\"\$at_libi86_multilib\"/ia16/libi86.a"
+at_fn_check_prepare_dynamic "$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -O2 -mrtd -mcmodel=small a.c \"$abs_top_builddir\"/\"$at_libi86_multilib\"/ia16/libi86.a" "testsuite.at:22"
+( $at_check_trace; $CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -O2 -mrtd -mcmodel=small a.c "$abs_top_builddir"/"$at_libi86_multilib"/ia16/libi86.a
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/testsuite.at:22"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+cat >a.c <<'_ATEOF'
+#if ! defined __ia16__
+# error
+#endif
+
+int main (void)
+{
+  return 0;
+}
+_ATEOF
+
+at_libi86_multilib="`$CC -Os -mrtd -mcmodel=small -print-multi-directory`"
+{ set +x
+$as_echo "$at_srcdir/testsuite.at:22: \$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -Os -mrtd -mcmodel=small a.c \"\$abs_top_builddir\"/\"\$at_libi86_multilib\"/ia16/libi86.a"
+at_fn_check_prepare_dynamic "$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -Os -mrtd -mcmodel=small a.c \"$abs_top_builddir\"/\"$at_libi86_multilib\"/ia16/libi86.a" "testsuite.at:22"
+( $at_check_trace; $CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -Os -mrtd -mcmodel=small a.c "$abs_top_builddir"/"$at_libi86_multilib"/ia16/libi86.a
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/testsuite.at:22"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+cat >a.c <<'_ATEOF'
+#if ! defined __ia16__
+# error
+#endif
+
+int main (void)
+{
+  return 0;
+}
+_ATEOF
+
+at_libi86_multilib="`$CC -march=any_186 -Os -mrtd -mcmodel=small -print-multi-directory`"
+{ set +x
+$as_echo "$at_srcdir/testsuite.at:22: \$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -Os -mrtd -mcmodel=small a.c \"\$abs_top_builddir\"/\"\$at_libi86_multilib\"/ia16/libi86.a"
+at_fn_check_prepare_dynamic "$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -Os -mrtd -mcmodel=small a.c \"$abs_top_builddir\"/\"$at_libi86_multilib\"/ia16/libi86.a" "testsuite.at:22"
+( $at_check_trace; $CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -Os -mrtd -mcmodel=small a.c "$abs_top_builddir"/"$at_libi86_multilib"/ia16/libi86.a
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/testsuite.at:22"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+cat >a.c <<'_ATEOF'
+#if ! defined __ia16__
+# error
+#endif
+
+int main (void)
+{
+  return 0;
+}
+_ATEOF
+
+at_libi86_multilib="`$CC -O2 -fno-omit-frame-pointer -mrtd -mcmodel=small -print-multi-directory`"
+{ set +x
+$as_echo "$at_srcdir/testsuite.at:22: \$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -O2 -fno-omit-frame-pointer -mrtd -mcmodel=small a.c \"\$abs_top_builddir\"/\"\$at_libi86_multilib\"/ia16/libi86.a"
+at_fn_check_prepare_dynamic "$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -O2 -fno-omit-frame-pointer -mrtd -mcmodel=small a.c \"$abs_top_builddir\"/\"$at_libi86_multilib\"/ia16/libi86.a" "testsuite.at:22"
+( $at_check_trace; $CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -O2 -fno-omit-frame-pointer -mrtd -mcmodel=small a.c "$abs_top_builddir"/"$at_libi86_multilib"/ia16/libi86.a
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/testsuite.at:22"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+cat >a.c <<'_ATEOF'
+#if ! defined __ia16__
+# error
+#endif
+
+int main (void)
+{
+  return 0;
+}
+_ATEOF
+
+at_libi86_multilib="`$CC -march=any_186 -O2 -fno-omit-frame-pointer -mrtd -mcmodel=small -print-multi-directory`"
+{ set +x
+$as_echo "$at_srcdir/testsuite.at:22: \$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -O2 -fno-omit-frame-pointer -mrtd -mcmodel=small a.c \"\$abs_top_builddir\"/\"\$at_libi86_multilib\"/ia16/libi86.a"
+at_fn_check_prepare_dynamic "$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -O2 -fno-omit-frame-pointer -mrtd -mcmodel=small a.c \"$abs_top_builddir\"/\"$at_libi86_multilib\"/ia16/libi86.a" "testsuite.at:22"
+( $at_check_trace; $CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -O2 -fno-omit-frame-pointer -mrtd -mcmodel=small a.c "$abs_top_builddir"/"$at_libi86_multilib"/ia16/libi86.a
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/testsuite.at:22"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+cat >a.c <<'_ATEOF'
+#if ! defined __ia16__
+# error
+#endif
+
+int main (void)
+{
+  return 0;
+}
+_ATEOF
+
+at_libi86_multilib="`$CC -O2 -mregparmcall -mcmodel=small -print-multi-directory`"
+{ set +x
+$as_echo "$at_srcdir/testsuite.at:22: \$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -O2 -mregparmcall -mcmodel=small a.c \"\$abs_top_builddir\"/\"\$at_libi86_multilib\"/ia16/libi86.a"
+at_fn_check_prepare_dynamic "$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -O2 -mregparmcall -mcmodel=small a.c \"$abs_top_builddir\"/\"$at_libi86_multilib\"/ia16/libi86.a" "testsuite.at:22"
+( $at_check_trace; $CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -O2 -mregparmcall -mcmodel=small a.c "$abs_top_builddir"/"$at_libi86_multilib"/ia16/libi86.a
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/testsuite.at:22"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+cat >a.c <<'_ATEOF'
+#if ! defined __ia16__
+# error
+#endif
+
+int main (void)
+{
+  return 0;
+}
+_ATEOF
+
+at_libi86_multilib="`$CC -march=any_186 -O2 -mregparmcall -mcmodel=small -print-multi-directory`"
+{ set +x
+$as_echo "$at_srcdir/testsuite.at:22: \$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -O2 -mregparmcall -mcmodel=small a.c \"\$abs_top_builddir\"/\"\$at_libi86_multilib\"/ia16/libi86.a"
+at_fn_check_prepare_dynamic "$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -O2 -mregparmcall -mcmodel=small a.c \"$abs_top_builddir\"/\"$at_libi86_multilib\"/ia16/libi86.a" "testsuite.at:22"
+( $at_check_trace; $CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -O2 -mregparmcall -mcmodel=small a.c "$abs_top_builddir"/"$at_libi86_multilib"/ia16/libi86.a
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/testsuite.at:22"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+cat >a.c <<'_ATEOF'
+#if ! defined __ia16__
+# error
+#endif
+
+int main (void)
+{
+  return 0;
+}
+_ATEOF
+
+at_libi86_multilib="`$CC -Os -mregparmcall -mcmodel=small -print-multi-directory`"
+{ set +x
+$as_echo "$at_srcdir/testsuite.at:22: \$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -Os -mregparmcall -mcmodel=small a.c \"\$abs_top_builddir\"/\"\$at_libi86_multilib\"/ia16/libi86.a"
+at_fn_check_prepare_dynamic "$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -Os -mregparmcall -mcmodel=small a.c \"$abs_top_builddir\"/\"$at_libi86_multilib\"/ia16/libi86.a" "testsuite.at:22"
+( $at_check_trace; $CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -Os -mregparmcall -mcmodel=small a.c "$abs_top_builddir"/"$at_libi86_multilib"/ia16/libi86.a
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/testsuite.at:22"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+cat >a.c <<'_ATEOF'
+#if ! defined __ia16__
+# error
+#endif
+
+int main (void)
+{
+  return 0;
+}
+_ATEOF
+
+at_libi86_multilib="`$CC -march=any_186 -Os -mregparmcall -mcmodel=small -print-multi-directory`"
+{ set +x
+$as_echo "$at_srcdir/testsuite.at:22: \$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -Os -mregparmcall -mcmodel=small a.c \"\$abs_top_builddir\"/\"\$at_libi86_multilib\"/ia16/libi86.a"
+at_fn_check_prepare_dynamic "$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -Os -mregparmcall -mcmodel=small a.c \"$abs_top_builddir\"/\"$at_libi86_multilib\"/ia16/libi86.a" "testsuite.at:22"
+( $at_check_trace; $CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -Os -mregparmcall -mcmodel=small a.c "$abs_top_builddir"/"$at_libi86_multilib"/ia16/libi86.a
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/testsuite.at:22"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+cat >a.c <<'_ATEOF'
+#if ! defined __ia16__
+# error
+#endif
+
+int main (void)
+{
+  return 0;
+}
+_ATEOF
+
+at_libi86_multilib="`$CC -O2 -fno-omit-frame-pointer -mregparmcall -mcmodel=small -print-multi-directory`"
+{ set +x
+$as_echo "$at_srcdir/testsuite.at:22: \$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -O2 -fno-omit-frame-pointer -mregparmcall -mcmodel=small a.c \"\$abs_top_builddir\"/\"\$at_libi86_multilib\"/ia16/libi86.a"
+at_fn_check_prepare_dynamic "$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -O2 -fno-omit-frame-pointer -mregparmcall -mcmodel=small a.c \"$abs_top_builddir\"/\"$at_libi86_multilib\"/ia16/libi86.a" "testsuite.at:22"
+( $at_check_trace; $CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -O2 -fno-omit-frame-pointer -mregparmcall -mcmodel=small a.c "$abs_top_builddir"/"$at_libi86_multilib"/ia16/libi86.a
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/testsuite.at:22"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+cat >a.c <<'_ATEOF'
+#if ! defined __ia16__
+# error
+#endif
+
+int main (void)
+{
+  return 0;
+}
+_ATEOF
+
+at_libi86_multilib="`$CC -march=any_186 -O2 -fno-omit-frame-pointer -mregparmcall -mcmodel=small -print-multi-directory`"
+{ set +x
+$as_echo "$at_srcdir/testsuite.at:22: \$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -O2 -fno-omit-frame-pointer -mregparmcall -mcmodel=small a.c \"\$abs_top_builddir\"/\"\$at_libi86_multilib\"/ia16/libi86.a"
+at_fn_check_prepare_dynamic "$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -O2 -fno-omit-frame-pointer -mregparmcall -mcmodel=small a.c \"$abs_top_builddir\"/\"$at_libi86_multilib\"/ia16/libi86.a" "testsuite.at:22"
+( $at_check_trace; $CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -O2 -fno-omit-frame-pointer -mregparmcall -mcmodel=small a.c "$abs_top_builddir"/"$at_libi86_multilib"/ia16/libi86.a
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/testsuite.at:22"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+  set +x
+  $at_times_p && times >"$at_times_file"
+) 5>&1 2>&1 7>&- | eval $at_tee_pipe
+read at_status <"$at_status_file"
+#AT_STOP_1
+#AT_START_2
+at_fn_group_banner 2 'testsuite.at:34' \
+  "<i86.h> tests" "                                  "
+at_xfail=no
+(
+  $as_echo "2. $at_setup_line: testing $at_desc ..."
+  $at_traceon
+
+cat >a.c <<'_ATEOF'
+#include <i86.h>
+
+int main (void)
+{
+  static char msg[] = "Hello world!\n";
+  union REGPACK regs;
+#ifdef __MSDOS__
+  regs.h.ah = 0x09;
+  regs.w.dx = FP_OFF (msg);
+  regs.w.ds = FP_SEG (msg);
+  intr (0x21, &regs);
+#else
+# error
+#endif
+  return 0;
+}
+_ATEOF
+
+at_libi86_multilib="`$CC -O2  -print-multi-directory`"
+{ set +x
+$as_echo "$at_srcdir/testsuite.at:35: \$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -O2  a.c \"\$abs_top_builddir\"/\"\$at_libi86_multilib\"/ia16/libi86.a"
+at_fn_check_prepare_dynamic "$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -O2  a.c \"$abs_top_builddir\"/\"$at_libi86_multilib\"/ia16/libi86.a" "testsuite.at:35"
+( $at_check_trace; $CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -O2  a.c "$abs_top_builddir"/"$at_libi86_multilib"/ia16/libi86.a
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/testsuite.at:35"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+cat >a.c <<'_ATEOF'
+#include <i86.h>
+
+int main (void)
+{
+  static char msg[] = "Hello world!\n";
+  union REGPACK regs;
+#ifdef __MSDOS__
+  regs.h.ah = 0x09;
+  regs.w.dx = FP_OFF (msg);
+  regs.w.ds = FP_SEG (msg);
+  intr (0x21, &regs);
+#else
+# error
+#endif
+  return 0;
+}
+_ATEOF
+
+at_libi86_multilib="`$CC -march=any_186 -O2  -print-multi-directory`"
+{ set +x
+$as_echo "$at_srcdir/testsuite.at:35: \$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -O2  a.c \"\$abs_top_builddir\"/\"\$at_libi86_multilib\"/ia16/libi86.a"
+at_fn_check_prepare_dynamic "$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -O2  a.c \"$abs_top_builddir\"/\"$at_libi86_multilib\"/ia16/libi86.a" "testsuite.at:35"
+( $at_check_trace; $CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -O2  a.c "$abs_top_builddir"/"$at_libi86_multilib"/ia16/libi86.a
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/testsuite.at:35"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+cat >a.c <<'_ATEOF'
+#include <i86.h>
+
+int main (void)
+{
+  static char msg[] = "Hello world!\n";
+  union REGPACK regs;
+#ifdef __MSDOS__
+  regs.h.ah = 0x09;
+  regs.w.dx = FP_OFF (msg);
+  regs.w.ds = FP_SEG (msg);
+  intr (0x21, &regs);
+#else
+# error
+#endif
+  return 0;
+}
+_ATEOF
+
+at_libi86_multilib="`$CC -Os  -print-multi-directory`"
+{ set +x
+$as_echo "$at_srcdir/testsuite.at:35: \$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -Os  a.c \"\$abs_top_builddir\"/\"\$at_libi86_multilib\"/ia16/libi86.a"
+at_fn_check_prepare_dynamic "$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -Os  a.c \"$abs_top_builddir\"/\"$at_libi86_multilib\"/ia16/libi86.a" "testsuite.at:35"
+( $at_check_trace; $CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -Os  a.c "$abs_top_builddir"/"$at_libi86_multilib"/ia16/libi86.a
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/testsuite.at:35"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+cat >a.c <<'_ATEOF'
+#include <i86.h>
+
+int main (void)
+{
+  static char msg[] = "Hello world!\n";
+  union REGPACK regs;
+#ifdef __MSDOS__
+  regs.h.ah = 0x09;
+  regs.w.dx = FP_OFF (msg);
+  regs.w.ds = FP_SEG (msg);
+  intr (0x21, &regs);
+#else
+# error
+#endif
+  return 0;
+}
+_ATEOF
+
+at_libi86_multilib="`$CC -march=any_186 -Os  -print-multi-directory`"
+{ set +x
+$as_echo "$at_srcdir/testsuite.at:35: \$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -Os  a.c \"\$abs_top_builddir\"/\"\$at_libi86_multilib\"/ia16/libi86.a"
+at_fn_check_prepare_dynamic "$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -Os  a.c \"$abs_top_builddir\"/\"$at_libi86_multilib\"/ia16/libi86.a" "testsuite.at:35"
+( $at_check_trace; $CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -Os  a.c "$abs_top_builddir"/"$at_libi86_multilib"/ia16/libi86.a
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/testsuite.at:35"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+cat >a.c <<'_ATEOF'
+#include <i86.h>
+
+int main (void)
+{
+  static char msg[] = "Hello world!\n";
+  union REGPACK regs;
+#ifdef __MSDOS__
+  regs.h.ah = 0x09;
+  regs.w.dx = FP_OFF (msg);
+  regs.w.ds = FP_SEG (msg);
+  intr (0x21, &regs);
+#else
+# error
+#endif
+  return 0;
+}
+_ATEOF
+
+at_libi86_multilib="`$CC -O2 -fno-omit-frame-pointer  -print-multi-directory`"
+{ set +x
+$as_echo "$at_srcdir/testsuite.at:35: \$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -O2 -fno-omit-frame-pointer  a.c \"\$abs_top_builddir\"/\"\$at_libi86_multilib\"/ia16/libi86.a"
+at_fn_check_prepare_dynamic "$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -O2 -fno-omit-frame-pointer  a.c \"$abs_top_builddir\"/\"$at_libi86_multilib\"/ia16/libi86.a" "testsuite.at:35"
+( $at_check_trace; $CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -O2 -fno-omit-frame-pointer  a.c "$abs_top_builddir"/"$at_libi86_multilib"/ia16/libi86.a
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/testsuite.at:35"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+cat >a.c <<'_ATEOF'
+#include <i86.h>
+
+int main (void)
+{
+  static char msg[] = "Hello world!\n";
+  union REGPACK regs;
+#ifdef __MSDOS__
+  regs.h.ah = 0x09;
+  regs.w.dx = FP_OFF (msg);
+  regs.w.ds = FP_SEG (msg);
+  intr (0x21, &regs);
+#else
+# error
+#endif
+  return 0;
+}
+_ATEOF
+
+at_libi86_multilib="`$CC -march=any_186 -O2 -fno-omit-frame-pointer  -print-multi-directory`"
+{ set +x
+$as_echo "$at_srcdir/testsuite.at:35: \$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -O2 -fno-omit-frame-pointer  a.c \"\$abs_top_builddir\"/\"\$at_libi86_multilib\"/ia16/libi86.a"
+at_fn_check_prepare_dynamic "$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -O2 -fno-omit-frame-pointer  a.c \"$abs_top_builddir\"/\"$at_libi86_multilib\"/ia16/libi86.a" "testsuite.at:35"
+( $at_check_trace; $CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -O2 -fno-omit-frame-pointer  a.c "$abs_top_builddir"/"$at_libi86_multilib"/ia16/libi86.a
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/testsuite.at:35"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+cat >a.c <<'_ATEOF'
+#include <i86.h>
+
+int main (void)
+{
+  static char msg[] = "Hello world!\n";
+  union REGPACK regs;
+#ifdef __MSDOS__
+  regs.h.ah = 0x09;
+  regs.w.dx = FP_OFF (msg);
+  regs.w.ds = FP_SEG (msg);
+  intr (0x21, &regs);
+#else
+# error
+#endif
+  return 0;
+}
+_ATEOF
+
+at_libi86_multilib="`$CC -O2 -mrtd  -print-multi-directory`"
+{ set +x
+$as_echo "$at_srcdir/testsuite.at:35: \$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -O2 -mrtd  a.c \"\$abs_top_builddir\"/\"\$at_libi86_multilib\"/ia16/libi86.a"
+at_fn_check_prepare_dynamic "$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -O2 -mrtd  a.c \"$abs_top_builddir\"/\"$at_libi86_multilib\"/ia16/libi86.a" "testsuite.at:35"
+( $at_check_trace; $CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -O2 -mrtd  a.c "$abs_top_builddir"/"$at_libi86_multilib"/ia16/libi86.a
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/testsuite.at:35"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+cat >a.c <<'_ATEOF'
+#include <i86.h>
+
+int main (void)
+{
+  static char msg[] = "Hello world!\n";
+  union REGPACK regs;
+#ifdef __MSDOS__
+  regs.h.ah = 0x09;
+  regs.w.dx = FP_OFF (msg);
+  regs.w.ds = FP_SEG (msg);
+  intr (0x21, &regs);
+#else
+# error
+#endif
+  return 0;
+}
+_ATEOF
+
+at_libi86_multilib="`$CC -march=any_186 -O2 -mrtd  -print-multi-directory`"
+{ set +x
+$as_echo "$at_srcdir/testsuite.at:35: \$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -O2 -mrtd  a.c \"\$abs_top_builddir\"/\"\$at_libi86_multilib\"/ia16/libi86.a"
+at_fn_check_prepare_dynamic "$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -O2 -mrtd  a.c \"$abs_top_builddir\"/\"$at_libi86_multilib\"/ia16/libi86.a" "testsuite.at:35"
+( $at_check_trace; $CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -O2 -mrtd  a.c "$abs_top_builddir"/"$at_libi86_multilib"/ia16/libi86.a
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/testsuite.at:35"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+cat >a.c <<'_ATEOF'
+#include <i86.h>
+
+int main (void)
+{
+  static char msg[] = "Hello world!\n";
+  union REGPACK regs;
+#ifdef __MSDOS__
+  regs.h.ah = 0x09;
+  regs.w.dx = FP_OFF (msg);
+  regs.w.ds = FP_SEG (msg);
+  intr (0x21, &regs);
+#else
+# error
+#endif
+  return 0;
+}
+_ATEOF
+
+at_libi86_multilib="`$CC -Os -mrtd  -print-multi-directory`"
+{ set +x
+$as_echo "$at_srcdir/testsuite.at:35: \$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -Os -mrtd  a.c \"\$abs_top_builddir\"/\"\$at_libi86_multilib\"/ia16/libi86.a"
+at_fn_check_prepare_dynamic "$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -Os -mrtd  a.c \"$abs_top_builddir\"/\"$at_libi86_multilib\"/ia16/libi86.a" "testsuite.at:35"
+( $at_check_trace; $CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -Os -mrtd  a.c "$abs_top_builddir"/"$at_libi86_multilib"/ia16/libi86.a
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/testsuite.at:35"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+cat >a.c <<'_ATEOF'
+#include <i86.h>
+
+int main (void)
+{
+  static char msg[] = "Hello world!\n";
+  union REGPACK regs;
+#ifdef __MSDOS__
+  regs.h.ah = 0x09;
+  regs.w.dx = FP_OFF (msg);
+  regs.w.ds = FP_SEG (msg);
+  intr (0x21, &regs);
+#else
+# error
+#endif
+  return 0;
+}
+_ATEOF
+
+at_libi86_multilib="`$CC -march=any_186 -Os -mrtd  -print-multi-directory`"
+{ set +x
+$as_echo "$at_srcdir/testsuite.at:35: \$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -Os -mrtd  a.c \"\$abs_top_builddir\"/\"\$at_libi86_multilib\"/ia16/libi86.a"
+at_fn_check_prepare_dynamic "$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -Os -mrtd  a.c \"$abs_top_builddir\"/\"$at_libi86_multilib\"/ia16/libi86.a" "testsuite.at:35"
+( $at_check_trace; $CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -Os -mrtd  a.c "$abs_top_builddir"/"$at_libi86_multilib"/ia16/libi86.a
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/testsuite.at:35"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+cat >a.c <<'_ATEOF'
+#include <i86.h>
+
+int main (void)
+{
+  static char msg[] = "Hello world!\n";
+  union REGPACK regs;
+#ifdef __MSDOS__
+  regs.h.ah = 0x09;
+  regs.w.dx = FP_OFF (msg);
+  regs.w.ds = FP_SEG (msg);
+  intr (0x21, &regs);
+#else
+# error
+#endif
+  return 0;
+}
+_ATEOF
+
+at_libi86_multilib="`$CC -O2 -fno-omit-frame-pointer -mrtd  -print-multi-directory`"
+{ set +x
+$as_echo "$at_srcdir/testsuite.at:35: \$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -O2 -fno-omit-frame-pointer -mrtd  a.c \"\$abs_top_builddir\"/\"\$at_libi86_multilib\"/ia16/libi86.a"
+at_fn_check_prepare_dynamic "$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -O2 -fno-omit-frame-pointer -mrtd  a.c \"$abs_top_builddir\"/\"$at_libi86_multilib\"/ia16/libi86.a" "testsuite.at:35"
+( $at_check_trace; $CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -O2 -fno-omit-frame-pointer -mrtd  a.c "$abs_top_builddir"/"$at_libi86_multilib"/ia16/libi86.a
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/testsuite.at:35"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+cat >a.c <<'_ATEOF'
+#include <i86.h>
+
+int main (void)
+{
+  static char msg[] = "Hello world!\n";
+  union REGPACK regs;
+#ifdef __MSDOS__
+  regs.h.ah = 0x09;
+  regs.w.dx = FP_OFF (msg);
+  regs.w.ds = FP_SEG (msg);
+  intr (0x21, &regs);
+#else
+# error
+#endif
+  return 0;
+}
+_ATEOF
+
+at_libi86_multilib="`$CC -march=any_186 -O2 -fno-omit-frame-pointer -mrtd  -print-multi-directory`"
+{ set +x
+$as_echo "$at_srcdir/testsuite.at:35: \$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -O2 -fno-omit-frame-pointer -mrtd  a.c \"\$abs_top_builddir\"/\"\$at_libi86_multilib\"/ia16/libi86.a"
+at_fn_check_prepare_dynamic "$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -O2 -fno-omit-frame-pointer -mrtd  a.c \"$abs_top_builddir\"/\"$at_libi86_multilib\"/ia16/libi86.a" "testsuite.at:35"
+( $at_check_trace; $CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -O2 -fno-omit-frame-pointer -mrtd  a.c "$abs_top_builddir"/"$at_libi86_multilib"/ia16/libi86.a
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/testsuite.at:35"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+cat >a.c <<'_ATEOF'
+#include <i86.h>
+
+int main (void)
+{
+  static char msg[] = "Hello world!\n";
+  union REGPACK regs;
+#ifdef __MSDOS__
+  regs.h.ah = 0x09;
+  regs.w.dx = FP_OFF (msg);
+  regs.w.ds = FP_SEG (msg);
+  intr (0x21, &regs);
+#else
+# error
+#endif
+  return 0;
+}
+_ATEOF
+
+at_libi86_multilib="`$CC -O2 -mregparmcall  -print-multi-directory`"
+{ set +x
+$as_echo "$at_srcdir/testsuite.at:35: \$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -O2 -mregparmcall  a.c \"\$abs_top_builddir\"/\"\$at_libi86_multilib\"/ia16/libi86.a"
+at_fn_check_prepare_dynamic "$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -O2 -mregparmcall  a.c \"$abs_top_builddir\"/\"$at_libi86_multilib\"/ia16/libi86.a" "testsuite.at:35"
+( $at_check_trace; $CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -O2 -mregparmcall  a.c "$abs_top_builddir"/"$at_libi86_multilib"/ia16/libi86.a
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/testsuite.at:35"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+cat >a.c <<'_ATEOF'
+#include <i86.h>
+
+int main (void)
+{
+  static char msg[] = "Hello world!\n";
+  union REGPACK regs;
+#ifdef __MSDOS__
+  regs.h.ah = 0x09;
+  regs.w.dx = FP_OFF (msg);
+  regs.w.ds = FP_SEG (msg);
+  intr (0x21, &regs);
+#else
+# error
+#endif
+  return 0;
+}
+_ATEOF
+
+at_libi86_multilib="`$CC -march=any_186 -O2 -mregparmcall  -print-multi-directory`"
+{ set +x
+$as_echo "$at_srcdir/testsuite.at:35: \$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -O2 -mregparmcall  a.c \"\$abs_top_builddir\"/\"\$at_libi86_multilib\"/ia16/libi86.a"
+at_fn_check_prepare_dynamic "$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -O2 -mregparmcall  a.c \"$abs_top_builddir\"/\"$at_libi86_multilib\"/ia16/libi86.a" "testsuite.at:35"
+( $at_check_trace; $CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -O2 -mregparmcall  a.c "$abs_top_builddir"/"$at_libi86_multilib"/ia16/libi86.a
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/testsuite.at:35"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+cat >a.c <<'_ATEOF'
+#include <i86.h>
+
+int main (void)
+{
+  static char msg[] = "Hello world!\n";
+  union REGPACK regs;
+#ifdef __MSDOS__
+  regs.h.ah = 0x09;
+  regs.w.dx = FP_OFF (msg);
+  regs.w.ds = FP_SEG (msg);
+  intr (0x21, &regs);
+#else
+# error
+#endif
+  return 0;
+}
+_ATEOF
+
+at_libi86_multilib="`$CC -Os -mregparmcall  -print-multi-directory`"
+{ set +x
+$as_echo "$at_srcdir/testsuite.at:35: \$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -Os -mregparmcall  a.c \"\$abs_top_builddir\"/\"\$at_libi86_multilib\"/ia16/libi86.a"
+at_fn_check_prepare_dynamic "$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -Os -mregparmcall  a.c \"$abs_top_builddir\"/\"$at_libi86_multilib\"/ia16/libi86.a" "testsuite.at:35"
+( $at_check_trace; $CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -Os -mregparmcall  a.c "$abs_top_builddir"/"$at_libi86_multilib"/ia16/libi86.a
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/testsuite.at:35"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+cat >a.c <<'_ATEOF'
+#include <i86.h>
+
+int main (void)
+{
+  static char msg[] = "Hello world!\n";
+  union REGPACK regs;
+#ifdef __MSDOS__
+  regs.h.ah = 0x09;
+  regs.w.dx = FP_OFF (msg);
+  regs.w.ds = FP_SEG (msg);
+  intr (0x21, &regs);
+#else
+# error
+#endif
+  return 0;
+}
+_ATEOF
+
+at_libi86_multilib="`$CC -march=any_186 -Os -mregparmcall  -print-multi-directory`"
+{ set +x
+$as_echo "$at_srcdir/testsuite.at:35: \$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -Os -mregparmcall  a.c \"\$abs_top_builddir\"/\"\$at_libi86_multilib\"/ia16/libi86.a"
+at_fn_check_prepare_dynamic "$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -Os -mregparmcall  a.c \"$abs_top_builddir\"/\"$at_libi86_multilib\"/ia16/libi86.a" "testsuite.at:35"
+( $at_check_trace; $CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -Os -mregparmcall  a.c "$abs_top_builddir"/"$at_libi86_multilib"/ia16/libi86.a
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/testsuite.at:35"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+cat >a.c <<'_ATEOF'
+#include <i86.h>
+
+int main (void)
+{
+  static char msg[] = "Hello world!\n";
+  union REGPACK regs;
+#ifdef __MSDOS__
+  regs.h.ah = 0x09;
+  regs.w.dx = FP_OFF (msg);
+  regs.w.ds = FP_SEG (msg);
+  intr (0x21, &regs);
+#else
+# error
+#endif
+  return 0;
+}
+_ATEOF
+
+at_libi86_multilib="`$CC -O2 -fno-omit-frame-pointer -mregparmcall  -print-multi-directory`"
+{ set +x
+$as_echo "$at_srcdir/testsuite.at:35: \$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -O2 -fno-omit-frame-pointer -mregparmcall  a.c \"\$abs_top_builddir\"/\"\$at_libi86_multilib\"/ia16/libi86.a"
+at_fn_check_prepare_dynamic "$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -O2 -fno-omit-frame-pointer -mregparmcall  a.c \"$abs_top_builddir\"/\"$at_libi86_multilib\"/ia16/libi86.a" "testsuite.at:35"
+( $at_check_trace; $CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -O2 -fno-omit-frame-pointer -mregparmcall  a.c "$abs_top_builddir"/"$at_libi86_multilib"/ia16/libi86.a
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/testsuite.at:35"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+cat >a.c <<'_ATEOF'
+#include <i86.h>
+
+int main (void)
+{
+  static char msg[] = "Hello world!\n";
+  union REGPACK regs;
+#ifdef __MSDOS__
+  regs.h.ah = 0x09;
+  regs.w.dx = FP_OFF (msg);
+  regs.w.ds = FP_SEG (msg);
+  intr (0x21, &regs);
+#else
+# error
+#endif
+  return 0;
+}
+_ATEOF
+
+at_libi86_multilib="`$CC -march=any_186 -O2 -fno-omit-frame-pointer -mregparmcall  -print-multi-directory`"
+{ set +x
+$as_echo "$at_srcdir/testsuite.at:35: \$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -O2 -fno-omit-frame-pointer -mregparmcall  a.c \"\$abs_top_builddir\"/\"\$at_libi86_multilib\"/ia16/libi86.a"
+at_fn_check_prepare_dynamic "$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -O2 -fno-omit-frame-pointer -mregparmcall  a.c \"$abs_top_builddir\"/\"$at_libi86_multilib\"/ia16/libi86.a" "testsuite.at:35"
+( $at_check_trace; $CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -O2 -fno-omit-frame-pointer -mregparmcall  a.c "$abs_top_builddir"/"$at_libi86_multilib"/ia16/libi86.a
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/testsuite.at:35"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+cat >a.c <<'_ATEOF'
+#include <i86.h>
+
+int main (void)
+{
+  static char msg[] = "Hello world!\n";
+  union REGPACK regs;
+#ifdef __MSDOS__
+  regs.h.ah = 0x09;
+  regs.w.dx = FP_OFF (msg);
+  regs.w.ds = FP_SEG (msg);
+  intr (0x21, &regs);
+#else
+# error
+#endif
+  return 0;
+}
+_ATEOF
+
+at_libi86_multilib="`$CC -O2 -mcmodel=small -print-multi-directory`"
+{ set +x
+$as_echo "$at_srcdir/testsuite.at:35: \$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -O2 -mcmodel=small a.c \"\$abs_top_builddir\"/\"\$at_libi86_multilib\"/ia16/libi86.a"
+at_fn_check_prepare_dynamic "$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -O2 -mcmodel=small a.c \"$abs_top_builddir\"/\"$at_libi86_multilib\"/ia16/libi86.a" "testsuite.at:35"
+( $at_check_trace; $CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -O2 -mcmodel=small a.c "$abs_top_builddir"/"$at_libi86_multilib"/ia16/libi86.a
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/testsuite.at:35"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+cat >a.c <<'_ATEOF'
+#include <i86.h>
+
+int main (void)
+{
+  static char msg[] = "Hello world!\n";
+  union REGPACK regs;
+#ifdef __MSDOS__
+  regs.h.ah = 0x09;
+  regs.w.dx = FP_OFF (msg);
+  regs.w.ds = FP_SEG (msg);
+  intr (0x21, &regs);
+#else
+# error
+#endif
+  return 0;
+}
+_ATEOF
+
+at_libi86_multilib="`$CC -march=any_186 -O2 -mcmodel=small -print-multi-directory`"
+{ set +x
+$as_echo "$at_srcdir/testsuite.at:35: \$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -O2 -mcmodel=small a.c \"\$abs_top_builddir\"/\"\$at_libi86_multilib\"/ia16/libi86.a"
+at_fn_check_prepare_dynamic "$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -O2 -mcmodel=small a.c \"$abs_top_builddir\"/\"$at_libi86_multilib\"/ia16/libi86.a" "testsuite.at:35"
+( $at_check_trace; $CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -O2 -mcmodel=small a.c "$abs_top_builddir"/"$at_libi86_multilib"/ia16/libi86.a
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/testsuite.at:35"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+cat >a.c <<'_ATEOF'
+#include <i86.h>
+
+int main (void)
+{
+  static char msg[] = "Hello world!\n";
+  union REGPACK regs;
+#ifdef __MSDOS__
+  regs.h.ah = 0x09;
+  regs.w.dx = FP_OFF (msg);
+  regs.w.ds = FP_SEG (msg);
+  intr (0x21, &regs);
+#else
+# error
+#endif
+  return 0;
+}
+_ATEOF
+
+at_libi86_multilib="`$CC -Os -mcmodel=small -print-multi-directory`"
+{ set +x
+$as_echo "$at_srcdir/testsuite.at:35: \$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -Os -mcmodel=small a.c \"\$abs_top_builddir\"/\"\$at_libi86_multilib\"/ia16/libi86.a"
+at_fn_check_prepare_dynamic "$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -Os -mcmodel=small a.c \"$abs_top_builddir\"/\"$at_libi86_multilib\"/ia16/libi86.a" "testsuite.at:35"
+( $at_check_trace; $CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -Os -mcmodel=small a.c "$abs_top_builddir"/"$at_libi86_multilib"/ia16/libi86.a
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/testsuite.at:35"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+cat >a.c <<'_ATEOF'
+#include <i86.h>
+
+int main (void)
+{
+  static char msg[] = "Hello world!\n";
+  union REGPACK regs;
+#ifdef __MSDOS__
+  regs.h.ah = 0x09;
+  regs.w.dx = FP_OFF (msg);
+  regs.w.ds = FP_SEG (msg);
+  intr (0x21, &regs);
+#else
+# error
+#endif
+  return 0;
+}
+_ATEOF
+
+at_libi86_multilib="`$CC -march=any_186 -Os -mcmodel=small -print-multi-directory`"
+{ set +x
+$as_echo "$at_srcdir/testsuite.at:35: \$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -Os -mcmodel=small a.c \"\$abs_top_builddir\"/\"\$at_libi86_multilib\"/ia16/libi86.a"
+at_fn_check_prepare_dynamic "$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -Os -mcmodel=small a.c \"$abs_top_builddir\"/\"$at_libi86_multilib\"/ia16/libi86.a" "testsuite.at:35"
+( $at_check_trace; $CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -Os -mcmodel=small a.c "$abs_top_builddir"/"$at_libi86_multilib"/ia16/libi86.a
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/testsuite.at:35"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+cat >a.c <<'_ATEOF'
+#include <i86.h>
+
+int main (void)
+{
+  static char msg[] = "Hello world!\n";
+  union REGPACK regs;
+#ifdef __MSDOS__
+  regs.h.ah = 0x09;
+  regs.w.dx = FP_OFF (msg);
+  regs.w.ds = FP_SEG (msg);
+  intr (0x21, &regs);
+#else
+# error
+#endif
+  return 0;
+}
+_ATEOF
+
+at_libi86_multilib="`$CC -O2 -fno-omit-frame-pointer -mcmodel=small -print-multi-directory`"
+{ set +x
+$as_echo "$at_srcdir/testsuite.at:35: \$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -O2 -fno-omit-frame-pointer -mcmodel=small a.c \"\$abs_top_builddir\"/\"\$at_libi86_multilib\"/ia16/libi86.a"
+at_fn_check_prepare_dynamic "$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -O2 -fno-omit-frame-pointer -mcmodel=small a.c \"$abs_top_builddir\"/\"$at_libi86_multilib\"/ia16/libi86.a" "testsuite.at:35"
+( $at_check_trace; $CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -O2 -fno-omit-frame-pointer -mcmodel=small a.c "$abs_top_builddir"/"$at_libi86_multilib"/ia16/libi86.a
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/testsuite.at:35"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+cat >a.c <<'_ATEOF'
+#include <i86.h>
+
+int main (void)
+{
+  static char msg[] = "Hello world!\n";
+  union REGPACK regs;
+#ifdef __MSDOS__
+  regs.h.ah = 0x09;
+  regs.w.dx = FP_OFF (msg);
+  regs.w.ds = FP_SEG (msg);
+  intr (0x21, &regs);
+#else
+# error
+#endif
+  return 0;
+}
+_ATEOF
+
+at_libi86_multilib="`$CC -march=any_186 -O2 -fno-omit-frame-pointer -mcmodel=small -print-multi-directory`"
+{ set +x
+$as_echo "$at_srcdir/testsuite.at:35: \$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -O2 -fno-omit-frame-pointer -mcmodel=small a.c \"\$abs_top_builddir\"/\"\$at_libi86_multilib\"/ia16/libi86.a"
+at_fn_check_prepare_dynamic "$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -O2 -fno-omit-frame-pointer -mcmodel=small a.c \"$abs_top_builddir\"/\"$at_libi86_multilib\"/ia16/libi86.a" "testsuite.at:35"
+( $at_check_trace; $CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -O2 -fno-omit-frame-pointer -mcmodel=small a.c "$abs_top_builddir"/"$at_libi86_multilib"/ia16/libi86.a
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/testsuite.at:35"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+cat >a.c <<'_ATEOF'
+#include <i86.h>
+
+int main (void)
+{
+  static char msg[] = "Hello world!\n";
+  union REGPACK regs;
+#ifdef __MSDOS__
+  regs.h.ah = 0x09;
+  regs.w.dx = FP_OFF (msg);
+  regs.w.ds = FP_SEG (msg);
+  intr (0x21, &regs);
+#else
+# error
+#endif
+  return 0;
+}
+_ATEOF
+
+at_libi86_multilib="`$CC -O2 -mrtd -mcmodel=small -print-multi-directory`"
+{ set +x
+$as_echo "$at_srcdir/testsuite.at:35: \$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -O2 -mrtd -mcmodel=small a.c \"\$abs_top_builddir\"/\"\$at_libi86_multilib\"/ia16/libi86.a"
+at_fn_check_prepare_dynamic "$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -O2 -mrtd -mcmodel=small a.c \"$abs_top_builddir\"/\"$at_libi86_multilib\"/ia16/libi86.a" "testsuite.at:35"
+( $at_check_trace; $CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -O2 -mrtd -mcmodel=small a.c "$abs_top_builddir"/"$at_libi86_multilib"/ia16/libi86.a
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/testsuite.at:35"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+cat >a.c <<'_ATEOF'
+#include <i86.h>
+
+int main (void)
+{
+  static char msg[] = "Hello world!\n";
+  union REGPACK regs;
+#ifdef __MSDOS__
+  regs.h.ah = 0x09;
+  regs.w.dx = FP_OFF (msg);
+  regs.w.ds = FP_SEG (msg);
+  intr (0x21, &regs);
+#else
+# error
+#endif
+  return 0;
+}
+_ATEOF
+
+at_libi86_multilib="`$CC -march=any_186 -O2 -mrtd -mcmodel=small -print-multi-directory`"
+{ set +x
+$as_echo "$at_srcdir/testsuite.at:35: \$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -O2 -mrtd -mcmodel=small a.c \"\$abs_top_builddir\"/\"\$at_libi86_multilib\"/ia16/libi86.a"
+at_fn_check_prepare_dynamic "$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -O2 -mrtd -mcmodel=small a.c \"$abs_top_builddir\"/\"$at_libi86_multilib\"/ia16/libi86.a" "testsuite.at:35"
+( $at_check_trace; $CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -O2 -mrtd -mcmodel=small a.c "$abs_top_builddir"/"$at_libi86_multilib"/ia16/libi86.a
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/testsuite.at:35"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+cat >a.c <<'_ATEOF'
+#include <i86.h>
+
+int main (void)
+{
+  static char msg[] = "Hello world!\n";
+  union REGPACK regs;
+#ifdef __MSDOS__
+  regs.h.ah = 0x09;
+  regs.w.dx = FP_OFF (msg);
+  regs.w.ds = FP_SEG (msg);
+  intr (0x21, &regs);
+#else
+# error
+#endif
+  return 0;
+}
+_ATEOF
+
+at_libi86_multilib="`$CC -Os -mrtd -mcmodel=small -print-multi-directory`"
+{ set +x
+$as_echo "$at_srcdir/testsuite.at:35: \$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -Os -mrtd -mcmodel=small a.c \"\$abs_top_builddir\"/\"\$at_libi86_multilib\"/ia16/libi86.a"
+at_fn_check_prepare_dynamic "$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -Os -mrtd -mcmodel=small a.c \"$abs_top_builddir\"/\"$at_libi86_multilib\"/ia16/libi86.a" "testsuite.at:35"
+( $at_check_trace; $CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -Os -mrtd -mcmodel=small a.c "$abs_top_builddir"/"$at_libi86_multilib"/ia16/libi86.a
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/testsuite.at:35"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+cat >a.c <<'_ATEOF'
+#include <i86.h>
+
+int main (void)
+{
+  static char msg[] = "Hello world!\n";
+  union REGPACK regs;
+#ifdef __MSDOS__
+  regs.h.ah = 0x09;
+  regs.w.dx = FP_OFF (msg);
+  regs.w.ds = FP_SEG (msg);
+  intr (0x21, &regs);
+#else
+# error
+#endif
+  return 0;
+}
+_ATEOF
+
+at_libi86_multilib="`$CC -march=any_186 -Os -mrtd -mcmodel=small -print-multi-directory`"
+{ set +x
+$as_echo "$at_srcdir/testsuite.at:35: \$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -Os -mrtd -mcmodel=small a.c \"\$abs_top_builddir\"/\"\$at_libi86_multilib\"/ia16/libi86.a"
+at_fn_check_prepare_dynamic "$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -Os -mrtd -mcmodel=small a.c \"$abs_top_builddir\"/\"$at_libi86_multilib\"/ia16/libi86.a" "testsuite.at:35"
+( $at_check_trace; $CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -Os -mrtd -mcmodel=small a.c "$abs_top_builddir"/"$at_libi86_multilib"/ia16/libi86.a
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/testsuite.at:35"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+cat >a.c <<'_ATEOF'
+#include <i86.h>
+
+int main (void)
+{
+  static char msg[] = "Hello world!\n";
+  union REGPACK regs;
+#ifdef __MSDOS__
+  regs.h.ah = 0x09;
+  regs.w.dx = FP_OFF (msg);
+  regs.w.ds = FP_SEG (msg);
+  intr (0x21, &regs);
+#else
+# error
+#endif
+  return 0;
+}
+_ATEOF
+
+at_libi86_multilib="`$CC -O2 -fno-omit-frame-pointer -mrtd -mcmodel=small -print-multi-directory`"
+{ set +x
+$as_echo "$at_srcdir/testsuite.at:35: \$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -O2 -fno-omit-frame-pointer -mrtd -mcmodel=small a.c \"\$abs_top_builddir\"/\"\$at_libi86_multilib\"/ia16/libi86.a"
+at_fn_check_prepare_dynamic "$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -O2 -fno-omit-frame-pointer -mrtd -mcmodel=small a.c \"$abs_top_builddir\"/\"$at_libi86_multilib\"/ia16/libi86.a" "testsuite.at:35"
+( $at_check_trace; $CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -O2 -fno-omit-frame-pointer -mrtd -mcmodel=small a.c "$abs_top_builddir"/"$at_libi86_multilib"/ia16/libi86.a
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/testsuite.at:35"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+cat >a.c <<'_ATEOF'
+#include <i86.h>
+
+int main (void)
+{
+  static char msg[] = "Hello world!\n";
+  union REGPACK regs;
+#ifdef __MSDOS__
+  regs.h.ah = 0x09;
+  regs.w.dx = FP_OFF (msg);
+  regs.w.ds = FP_SEG (msg);
+  intr (0x21, &regs);
+#else
+# error
+#endif
+  return 0;
+}
+_ATEOF
+
+at_libi86_multilib="`$CC -march=any_186 -O2 -fno-omit-frame-pointer -mrtd -mcmodel=small -print-multi-directory`"
+{ set +x
+$as_echo "$at_srcdir/testsuite.at:35: \$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -O2 -fno-omit-frame-pointer -mrtd -mcmodel=small a.c \"\$abs_top_builddir\"/\"\$at_libi86_multilib\"/ia16/libi86.a"
+at_fn_check_prepare_dynamic "$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -O2 -fno-omit-frame-pointer -mrtd -mcmodel=small a.c \"$abs_top_builddir\"/\"$at_libi86_multilib\"/ia16/libi86.a" "testsuite.at:35"
+( $at_check_trace; $CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -O2 -fno-omit-frame-pointer -mrtd -mcmodel=small a.c "$abs_top_builddir"/"$at_libi86_multilib"/ia16/libi86.a
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/testsuite.at:35"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+cat >a.c <<'_ATEOF'
+#include <i86.h>
+
+int main (void)
+{
+  static char msg[] = "Hello world!\n";
+  union REGPACK regs;
+#ifdef __MSDOS__
+  regs.h.ah = 0x09;
+  regs.w.dx = FP_OFF (msg);
+  regs.w.ds = FP_SEG (msg);
+  intr (0x21, &regs);
+#else
+# error
+#endif
+  return 0;
+}
+_ATEOF
+
+at_libi86_multilib="`$CC -O2 -mregparmcall -mcmodel=small -print-multi-directory`"
+{ set +x
+$as_echo "$at_srcdir/testsuite.at:35: \$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -O2 -mregparmcall -mcmodel=small a.c \"\$abs_top_builddir\"/\"\$at_libi86_multilib\"/ia16/libi86.a"
+at_fn_check_prepare_dynamic "$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -O2 -mregparmcall -mcmodel=small a.c \"$abs_top_builddir\"/\"$at_libi86_multilib\"/ia16/libi86.a" "testsuite.at:35"
+( $at_check_trace; $CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -O2 -mregparmcall -mcmodel=small a.c "$abs_top_builddir"/"$at_libi86_multilib"/ia16/libi86.a
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/testsuite.at:35"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+cat >a.c <<'_ATEOF'
+#include <i86.h>
+
+int main (void)
+{
+  static char msg[] = "Hello world!\n";
+  union REGPACK regs;
+#ifdef __MSDOS__
+  regs.h.ah = 0x09;
+  regs.w.dx = FP_OFF (msg);
+  regs.w.ds = FP_SEG (msg);
+  intr (0x21, &regs);
+#else
+# error
+#endif
+  return 0;
+}
+_ATEOF
+
+at_libi86_multilib="`$CC -march=any_186 -O2 -mregparmcall -mcmodel=small -print-multi-directory`"
+{ set +x
+$as_echo "$at_srcdir/testsuite.at:35: \$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -O2 -mregparmcall -mcmodel=small a.c \"\$abs_top_builddir\"/\"\$at_libi86_multilib\"/ia16/libi86.a"
+at_fn_check_prepare_dynamic "$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -O2 -mregparmcall -mcmodel=small a.c \"$abs_top_builddir\"/\"$at_libi86_multilib\"/ia16/libi86.a" "testsuite.at:35"
+( $at_check_trace; $CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -O2 -mregparmcall -mcmodel=small a.c "$abs_top_builddir"/"$at_libi86_multilib"/ia16/libi86.a
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/testsuite.at:35"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+cat >a.c <<'_ATEOF'
+#include <i86.h>
+
+int main (void)
+{
+  static char msg[] = "Hello world!\n";
+  union REGPACK regs;
+#ifdef __MSDOS__
+  regs.h.ah = 0x09;
+  regs.w.dx = FP_OFF (msg);
+  regs.w.ds = FP_SEG (msg);
+  intr (0x21, &regs);
+#else
+# error
+#endif
+  return 0;
+}
+_ATEOF
+
+at_libi86_multilib="`$CC -Os -mregparmcall -mcmodel=small -print-multi-directory`"
+{ set +x
+$as_echo "$at_srcdir/testsuite.at:35: \$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -Os -mregparmcall -mcmodel=small a.c \"\$abs_top_builddir\"/\"\$at_libi86_multilib\"/ia16/libi86.a"
+at_fn_check_prepare_dynamic "$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -Os -mregparmcall -mcmodel=small a.c \"$abs_top_builddir\"/\"$at_libi86_multilib\"/ia16/libi86.a" "testsuite.at:35"
+( $at_check_trace; $CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -Os -mregparmcall -mcmodel=small a.c "$abs_top_builddir"/"$at_libi86_multilib"/ia16/libi86.a
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/testsuite.at:35"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+cat >a.c <<'_ATEOF'
+#include <i86.h>
+
+int main (void)
+{
+  static char msg[] = "Hello world!\n";
+  union REGPACK regs;
+#ifdef __MSDOS__
+  regs.h.ah = 0x09;
+  regs.w.dx = FP_OFF (msg);
+  regs.w.ds = FP_SEG (msg);
+  intr (0x21, &regs);
+#else
+# error
+#endif
+  return 0;
+}
+_ATEOF
+
+at_libi86_multilib="`$CC -march=any_186 -Os -mregparmcall -mcmodel=small -print-multi-directory`"
+{ set +x
+$as_echo "$at_srcdir/testsuite.at:35: \$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -Os -mregparmcall -mcmodel=small a.c \"\$abs_top_builddir\"/\"\$at_libi86_multilib\"/ia16/libi86.a"
+at_fn_check_prepare_dynamic "$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -Os -mregparmcall -mcmodel=small a.c \"$abs_top_builddir\"/\"$at_libi86_multilib\"/ia16/libi86.a" "testsuite.at:35"
+( $at_check_trace; $CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -Os -mregparmcall -mcmodel=small a.c "$abs_top_builddir"/"$at_libi86_multilib"/ia16/libi86.a
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/testsuite.at:35"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+cat >a.c <<'_ATEOF'
+#include <i86.h>
+
+int main (void)
+{
+  static char msg[] = "Hello world!\n";
+  union REGPACK regs;
+#ifdef __MSDOS__
+  regs.h.ah = 0x09;
+  regs.w.dx = FP_OFF (msg);
+  regs.w.ds = FP_SEG (msg);
+  intr (0x21, &regs);
+#else
+# error
+#endif
+  return 0;
+}
+_ATEOF
+
+at_libi86_multilib="`$CC -O2 -fno-omit-frame-pointer -mregparmcall -mcmodel=small -print-multi-directory`"
+{ set +x
+$as_echo "$at_srcdir/testsuite.at:35: \$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -O2 -fno-omit-frame-pointer -mregparmcall -mcmodel=small a.c \"\$abs_top_builddir\"/\"\$at_libi86_multilib\"/ia16/libi86.a"
+at_fn_check_prepare_dynamic "$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -O2 -fno-omit-frame-pointer -mregparmcall -mcmodel=small a.c \"$abs_top_builddir\"/\"$at_libi86_multilib\"/ia16/libi86.a" "testsuite.at:35"
+( $at_check_trace; $CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -O2 -fno-omit-frame-pointer -mregparmcall -mcmodel=small a.c "$abs_top_builddir"/"$at_libi86_multilib"/ia16/libi86.a
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/testsuite.at:35"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+cat >a.c <<'_ATEOF'
+#include <i86.h>
+
+int main (void)
+{
+  static char msg[] = "Hello world!\n";
+  union REGPACK regs;
+#ifdef __MSDOS__
+  regs.h.ah = 0x09;
+  regs.w.dx = FP_OFF (msg);
+  regs.w.ds = FP_SEG (msg);
+  intr (0x21, &regs);
+#else
+# error
+#endif
+  return 0;
+}
+_ATEOF
+
+at_libi86_multilib="`$CC -march=any_186 -O2 -fno-omit-frame-pointer -mregparmcall -mcmodel=small -print-multi-directory`"
+{ set +x
+$as_echo "$at_srcdir/testsuite.at:35: \$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -O2 -fno-omit-frame-pointer -mregparmcall -mcmodel=small a.c \"\$abs_top_builddir\"/\"\$at_libi86_multilib\"/ia16/libi86.a"
+at_fn_check_prepare_dynamic "$CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -O2 -fno-omit-frame-pointer -mregparmcall -mcmodel=small a.c \"$abs_top_builddir\"/\"$at_libi86_multilib\"/ia16/libi86.a" "testsuite.at:35"
+( $at_check_trace; $CC -o a.exe -Wall -Werror=strict-prototypes -Werror=missing-prototypes -march=any_186 -O2 -fno-omit-frame-pointer -mregparmcall -mcmodel=small a.c "$abs_top_builddir"/"$at_libi86_multilib"/ia16/libi86.a
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/testsuite.at:35"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+  set +x
+  $at_times_p && times >"$at_times_file"
+) 5>&1 2>&1 7>&- | eval $at_tee_pipe
+read at_status <"$at_status_file"
+#AT_STOP_2

@@ -16,3 +16,38 @@ dnl <http://www.gnu.org/licenses/>.
 
 AT_INIT(libi86)
 AT_COLOR_TESTS
+
+AT_SETUP([[Basic sanity meta-checks on the GCC toolchain]])
+AT_CHECK([[$CC --version -v]],,[[ignore]],[[ignore]])
+AT_LIBI86_LINK_CHECK(dnl
+[[#if ! defined __ia16__
+# error
+#endif
+
+int main (void)
+{
+  return 0;
+}
+]])
+AT_CLEANUP
+
+AT_SETUP([[<i86.h> tests]])
+AT_LIBI86_LINK_CHECK(dnl
+[[#include <i86.h>
+
+int main (void)
+{
+  static char msg[] = "Hello world!\n";
+  union REGPACK regs;
+#ifdef __MSDOS__
+  regs.h.ah = 0x09;
+  regs.w.dx = FP_OFF (msg);
+  regs.w.ds = FP_SEG (msg);
+  intr (0x21, &regs);
+#else
+# error
+#endif
+  return 0;
+}
+]])
+AT_CLEANUP

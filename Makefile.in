@@ -25,7 +25,7 @@ distclean maintainer-clean:
 .PHONY: distclean maintainer-clean
 
 check check-local:
-	exec $(srcdir)/tests/testsuite $(TESTSUITEFLAGS)
+	exec $(srcdir)/tests/testsuite -C tests $(TESTSUITEFLAGS)
 .PHONY: check check-local
 
 %:
