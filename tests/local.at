@@ -16,8 +16,9 @@ dnl <http://www.gnu.org/licenses/>.
 
 m4_define([_AT_LIBI86_DO_CHECK_EXPOUT_A],[dnl
 at_libi86_multilib="`$CC $1 -print-multi-directory`"
-AT_CHECK([[$CC -o a.exe -Wall -Werror=strict-prototypes ]]dnl
-[[-Werror=missing-prototypes ]][$1] [$2] dnl
+AT_CHECK([[$CC -o a.exe ]]dnl
+[[-isystem "$abs_top_builddir/"ia16 -isystem "$abs_top_srcdir"/ia16 ]]dnl
+[[-Wall -Werror=strict-prototypes -Werror=missing-prototypes ]][$1] [$2] dnl
 [["$abs_top_builddir"/"$at_libi86_multilib"/ia16/libi86.a]],dnl
 ,[[ignore]],[[ignore]])
 AT_CHECK([[$DOSEMU -dumb -quiet -K a.exe >a.log && dos2unix <a.log]],,dnl
