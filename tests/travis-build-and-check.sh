@@ -22,6 +22,9 @@ set -e -v
 mkdir build-$$ install-$$
 inst_prefix="`pwd`"/install-$$
 cd build-$$
+# Travis CI sets $CC to `gcc'.  This interferes with the `configure' script's
+# detection of the C compiler, which should really be `ia16-elf-gcc'.  (!)
+unset CC
 ../configure --host=ia16-elf --prefix="$inst_prefix" ${1+"$@"}
 make
 make check
