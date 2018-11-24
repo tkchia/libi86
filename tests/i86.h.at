@@ -1,0 +1,101 @@
+dnl Copyright (c) 2018 TK Chia
+dnl
+dnl This file is free software; you can redistribute it and/or modify it
+dnl under the terms of the GNU Lesser General Public License as published by
+dnl the Free Software Foundation; either version 3 of the License, or
+dnl (at your option) any later version.
+dnl
+dnl This program is distributed in the hope that it will be useful, but
+dnl WITHOUT ANY WARRANTY; without even the implied warranty of
+dnl MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+dnl Lesser General Public License for more details.
+dnl
+dnl You should have received a copy of the GNU Lesser General Public License
+dnl along with this program; see the file COPYING3.LIB.  If not see
+dnl <http://www.gnu.org/licenses/>.
+
+AT_BANNER([[<i86.h> tests]])
+
+AT_SETUP([[FP_SEG, FP_OFF]])
+AT_LIBI86_CHECK(dnl
+[[#include <stdlib.h>
+#include <i86.h>
+#ifndef __IA16_CMODEL_TINY__
+volatile int __far x = 1;
+volatile int __far *px = &x;
+#endif
+volatile int y = 2;
+static unsigned get_cs (void)
+{
+  unsigned v;
+  __asm volatile ("movw %%cs, %0" : "=r" (v));
+  return v;
+}
+static unsigned get_ss (void)
+{
+  unsigned v;
+  __asm volatile ("movw %%ss, %0" : "=r" (v));
+  return v;
+}
+int main (void)
+{
+  if (FP_SEG (main) != get_cs ())
+    abort ();
+  if (FP_OFF (main) != (unsigned) main)
+    abort ();
+#ifndef __IA16_CMODEL_TINY__
+  if (FP_SEG (&x) != (unsigned long) &x >> 16)
+    abort ();
+  if (FP_SEG (&x) != (unsigned long) px >> 16)
+    abort ();
+  if (FP_OFF (&x) != (unsigned) (unsigned long) &x)
+    abort ();
+  if (FP_OFF (&x) != (unsigned) (unsigned long) px)
+    abort ();
+#endif
+  if (FP_SEG (&y) != get_ss ())
+    abort ();
+  if (FP_OFF (&y) != (unsigned) &y)
+    abort ();
+  return 0;
+}]],[])
+AT_CLEANUP
+
+AT_SETUP([[int86]])
+AT_LIBI86_CHECK(dnl
+[[#include <i86.h>
+int main (void)
+{
+  union REGS regs;
+#ifdef __MSDOS__
+  static char msg[] = "Hello from int86!\r\n$(ignore this part)\r\n";
+  regs.h.ah = 0x09;
+  regs.w.dx = FP_OFF (msg);
+  int86 (0x21, &regs, &regs);
+#else
+# error
+#endif
+  return 0;
+}]],[[Hello from int86!
+]])
+AT_CLEANUP
+
+AT_SETUP([[intr]])
+AT_LIBI86_CHECK(dnl
+[[#include <i86.h>
+int main (void)
+{
+  union REGPACK regs;
+#ifdef __MSDOS__
+  static char msg[] = "Hello from intr!\r\n$(ignore this part)\r\n";
+  regs.h.ah = 0x09;
+  regs.w.dx = FP_OFF (msg);
+  regs.w.ds = FP_SEG (msg);
+  intr (0x21, &regs);
+#else
+# error
+#endif
+  return 0;
+}]],[[Hello from intr!
+]])
+AT_CLEANUP

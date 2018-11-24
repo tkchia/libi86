@@ -14,7 +14,36 @@ dnl You should have received a copy of the GNU Lesser General Public License
 dnl along with this program; see the file COPYING3.LIB.  If not see
 dnl <http://www.gnu.org/licenses/>.
 
-AT_INIT(libi86)
-AT_COLOR_TESTS
-m4_include([metacheck.at])
-m4_include([i86.h.at])
+AT_BANNER([[Basic sanity meta-checks on the test setup]])
+
+AT_SETUP([[dos2unix]])
+AT_CHECK([[dos2unix --version]],,[[ignore]],[[ignore]])
+AT_CLEANUP
+
+AT_SETUP([[dosemu]])
+
+AT_CHECK([[$DOSEMU --version]],,[[ignore]],[[ignore]])
+AT_CHECK([[$DOSEMU -dumb -quiet -K "$abs_srcdir"/hello-lfn.com >a.log && ]]dnl
+[[dos2unix <a.log]],,[[Hello world (with long file name)!
+]],[[ignore]])
+
+AT_CLEANUP
+
+AT_SETUP([[GCC toolchain]])
+
+AT_CHECK([[$CC --version -v]],,[[ignore]],[[ignore]])
+AT_LIBI86_CHECK(dnl
+[[#if ! defined __ia16__
+# error
+#endif
+#include <stdio.h>
+char dawg[] = "dawg";
+int main (void)
+{
+  printf("yo %s\n", dawg);
+  return 0;
+}
+]],[[yo dawg
+]])
+
+AT_CLEANUP

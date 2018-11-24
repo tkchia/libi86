@@ -16,6 +16,7 @@
 # <http://www.gnu.org/licenses/>.
 
 echo "PATH=$PATH"
+find -name autom4te.cache -type d -print0 | xargs -0 rm -rf
 find -name configure.ac -type f -print -execdir autoconf \;
 find -name testsuite.at -type f -print \
   -execdir autom4te --language=autotest -o testsuite testsuite.at \;

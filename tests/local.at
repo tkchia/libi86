@@ -14,28 +14,32 @@ dnl You should have received a copy of the GNU Lesser General Public License
 dnl along with this program; see the file COPYING3.LIB.  If not see
 dnl <http://www.gnu.org/licenses/>.
 
-m4_define([_AT_LIBI86_DO_LINK_CHECK_A],[dnl
-AT_DATA([[a.c]],[$2])
+m4_define([_AT_LIBI86_DO_CHECK_EXPOUT_A],[dnl
 at_libi86_multilib="`$CC $1 -print-multi-directory`"
 AT_CHECK([[$CC -o a.exe -Wall -Werror=strict-prototypes ]]dnl
-[[-Werror=missing-prototypes ]][$1][[ a.c ]]dnl
+[[-Werror=missing-prototypes ]][$1] [$2] dnl
 [["$abs_top_builddir"/"$at_libi86_multilib"/ia16/libi86.a]],dnl
-,[[ignore]],[[ignore]])])
+,[[ignore]],[[ignore]])
+AT_CHECK([[$DOSEMU -dumb -quiet -K a.exe >a.log && dos2unix <a.log]],,dnl
+[[expout]],[[ignore]])])
 
-m4_define([_AT_LIBI86_DO_LINK_CHECK_B],[dnl
-_AT_LIBI86_DO_LINK_CHECK_A($@)
-_AT_LIBI86_DO_LINK_CHECK_A([[-march=any_186 ]]$@)])
+m4_define([_AT_LIBI86_DO_CHECK_EXPOUT_B],[dnl
+_AT_LIBI86_DO_CHECK_EXPOUT_A($@)
+_AT_LIBI86_DO_CHECK_EXPOUT_A([[-march=any_186 ]]$@)])
 
-m4_define([_AT_LIBI86_DO_LINK_CHECK_C],[dnl
-_AT_LIBI86_DO_LINK_CHECK_B([[-O2 ]]$@)
-_AT_LIBI86_DO_LINK_CHECK_B([[-Os ]]$@)
-_AT_LIBI86_DO_LINK_CHECK_B([[-O2 -fno-omit-frame-pointer ]]$@)])
+m4_define([_AT_LIBI86_DO_CHECK_EXPOUT_C],[dnl
+_AT_LIBI86_DO_CHECK_EXPOUT_B([[-O2 ]]$@)
+_AT_LIBI86_DO_CHECK_EXPOUT_B([[-Os ]]$@)
+_AT_LIBI86_DO_CHECK_EXPOUT_B([[-O2 -fno-omit-frame-pointer ]]$@)])
 
-m4_define([_AT_LIBI86_DO_LINK_CHECK_D],[dnl
-_AT_LIBI86_DO_LINK_CHECK_C($@)
-_AT_LIBI86_DO_LINK_CHECK_C([[-mrtd ]]$@)
-_AT_LIBI86_DO_LINK_CHECK_C([[-mregparmcall ]]$@)])
+m4_define([_AT_LIBI86_DO_CHECK_EXPOUT_D],[dnl
+_AT_LIBI86_DO_CHECK_EXPOUT_C($@)
+_AT_LIBI86_DO_CHECK_EXPOUT_C([[-mrtd ]]$@)
+_AT_LIBI86_DO_CHECK_EXPOUT_C([[-mregparmcall ]]$@)])
 
-m4_define([AT_LIBI86_LINK_CHECK],[dnl
-_AT_LIBI86_DO_LINK_CHECK_D(,$@)
-_AT_LIBI86_DO_LINK_CHECK_D([[-mcmodel=small]],$@)])
+m4_define([AT_LIBI86_CHECK],[dnl
+AT_DATA([[a.c]],[$1
+])
+AT_DATA([[expout]],[$2])
+_AT_LIBI86_DO_CHECK_EXPOUT_D(,a.c)
+_AT_LIBI86_DO_CHECK_EXPOUT_D([[-mcmodel=small]],a.c)])

@@ -14,7 +14,7 @@
 # along with this program; see the file COPYING3.LIB.  If not see
 # <http://www.gnu.org/licenses/>.
 
-srcdir = @srcdir@
+abs_srcdir = @abs_srcdir@
 
 default: all
 .PHONY: default
@@ -24,9 +24,13 @@ distclean maintainer-clean:
 	$(RM) Makefile config.cache config.log config.status
 .PHONY: distclean maintainer-clean
 
-check check-local:
-	exec $(srcdir)/tests/testsuite -C tests $(TESTSUITEFLAGS)
+check check-local: $(abs_srcdir)/tests/testsuite
+	exec $< -C tests $(TESTSUITEFLAGS)
 .PHONY: check check-local
+
+$(abs_srcdir)/tests/testsuite: $(abs_srcdir)/tests/testsuite.at \
+			   $(wildcard $(abs_srcdir)/tests/*.at)
+	cd $(abs_srcdir)/tests && exec autom4te --language=autotest -o $@ $<
 
 %:
 	$(MAKE) -C ia16 $@
