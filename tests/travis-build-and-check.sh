@@ -27,5 +27,6 @@ cd build-$$
 unset CC
 ../configure --host=ia16-elf --prefix="$inst_prefix" ${1+"$@"}
 make
-make check
+make check || \
+  (cat tests/testsuite.log && exit 1)
 exec make install
