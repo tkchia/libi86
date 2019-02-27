@@ -74,11 +74,10 @@ __ia16_need_libfen86 = 1
 	movw	%cs,	2(%bx)
 	popl	(%bx)
 .Ldo:
-	/* Yes, we are on a 386+.  Save the original value of %dr7.  */
-	cli
+	/* Yes, we are on a 386+.  Save the original LE and GE bits of %dr7. */
 	movl	%dr7,	%eax
-	movl	%eax,	%ss:.Lorig_dr7
-	sti
+	andb	$((DR7_LE|DR7_GE)>>8), %ah
+	movb	%ah,	%ss:.Lorig_dr7_le_ge
 	/* Try to place a hardware breakpoint on writes at offsets 0--3
 	   within the data segment, i.e. at the near null address.  */
 	movw	%ss,	%dx
@@ -124,16 +123,17 @@ __ia16_need_libfen86 = 1
 	movb	.Lnull_drs+1, %al
 	call	.Lfree_hw_bkpt
 	cli
-	movl	$.Lp_orig_excp1, %eax
+	movl	.Lp_orig_excp1, %eax
 	pushw	$0
 	popw	%ds
 	movl	%eax,	1*4
 	pushw	%ss
 	popw	%ds
-	movl	.Lorig_dr7, %eax
-	testw	$(DR7_LE|DR7_GE), %ax
-	jnz	.Ldone_dtor_sti
-	movl	%eax,	%dr7
+	movb	.Lorig_dr7_le_ge, %al
+	movl	%dr7,	%edx
+	andb	$~((DR7_LE|DR7_GE)>>8), %dh
+	orb	%al,	%dh
+	movl	%edx,	%dr7
 .Ldone_dtor_sti:
 	sti
 .Ldone_dtor:
@@ -153,8 +153,6 @@ __ia16_need_libfen86 = 1
 	shll	$4,	%edx
 	addl	%eax,	%edx
 	movl	%dr7,	%eax
-	testw	$(DR7_LE|DR7_GE), %ax
-	jz	.Lenable
 	testb	$(DR7_L0|DR7_G0), %al
 	jz	.Lalloc0
 	testb	$(DR7_L1|DR7_G1), %al
@@ -165,29 +163,27 @@ __ia16_need_libfen86 = 1
 	jz	.Lalloc3
 	movb	$-1,	%al
 	jmp	.Ldone_alloc
-.Lenable:
-	orw	$(DR7_LE|DR7_GE), %ax
-	movb	$0,	%al
 .Lalloc0:
 	orb	$(DR7_L0|DR7_G0), %al
 	movl	%edx,	%dr0
 	movb	$0,	%cl
-	jmp	.Lset_rw_len
+	jmp	.Lset_rest
 .Lalloc1:
 	orb	$(DR7_L1|DR7_G1), %al
 	movl	%edx,	%dr1
 	movb	$1,	%cl
-	jmp	.Lset_rw_len
+	jmp	.Lset_rest
 .Lalloc2:
 	orb	$(DR7_L2|DR7_G2), %al
 	movl	%edx,	%dr2
 	movb	$2,	%cl
-	jmp	.Lset_rw_len
+	jmp	.Lset_rest
 .Lalloc3:
 	orb	$(DR7_L3|DR7_G3), %al
 	movl	%edx,	%dr3
 	movb	$3,	%cl
-.Lset_rw_len:
+.Lset_rest:
+	orw	$(DR7_LE|DR7_GE), %ax
 	pushw	%cx
 	shlb	%cl
 	shlb	%cl
@@ -247,7 +243,7 @@ __ia16_need_libfen86 = 1
 .Lnull_drs:
 	.byte	-1, -1
 
-	.lcomm	.Lorig_dr7, 4
+	.lcomm	.Lorig_dr7_le_ge, 1
 	.lcomm	.Lp_orig_excp1, 4
 #else
 # warning "unknown target OS; libfen86 not implemented"
