@@ -85,24 +85,22 @@ __ia16_need_libfen86 = 1
 	xorw	%ax,	%ax
 	movb	$(DR7_BKPT_W|DR7_LEN_4B), %ch
 	call	.Lalloc_hw_bkpt
+	movb	%al,	%ss:.Lnull_drs
 	incw	%ax
 	jz	.Ldone_ctor_restore_ds
-	movb	%al,	%ss:.Lnull_drs
 	/* If we are successful, install an exception 1 handler.  */
 	movw	$1*4,	%bx
 	pushl	(%bx)
-	popl	.Lp_orig_excp1
+	popl	%ss:.Lp_orig_excp1
 	movw	$.Lexcp1, (%bx)
 	movw	%cs,	2(%bx)
 	/* Try to place another breakpoint for offsets 4--7.  */
 	movw	%ss,	%dx
+	movw	%dx,	%ds
 	movw	$4,	%ax
 	movb	$(DR7_BKPT_W|DR7_LEN_4B), %ch
 	call	.Lalloc_hw_bkpt
-	movb	%al,	%ss:.Lnull_drs+1
-.Ldone_ctor_restore_ds:
-	pushw	%ss
-	popw	%ds
+	movb	%al,	.Lnull_drs+1
 .Ldone_ctor:
 	ret
 .Lexcp6:
@@ -111,9 +109,10 @@ __ia16_need_libfen86 = 1
 	popfw
 	popw	(%bx)
 	popw	2(%bx)
+.Ldone_ctor_restore_ds:
 	pushw	%ss
 	popw	%ds
-	jmp	.Ldone_ctor
+	ret
 
 .Ldtor_fen86:
 	/* Free up any hardware breakpoints we have allocated.  Note that
@@ -192,6 +191,7 @@ __ia16_need_libfen86 = 1
 	pushw	%cx
 	shlb	%cl
 	shlb	%cl
+	add	$16,	%cl
 	rorl	%cl,	%eax
 	andb	$~(DR7_BKPT_MASK|DR7_LEN_MASK), %al
 	orb	%ch,	%al
