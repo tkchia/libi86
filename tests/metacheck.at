@@ -29,6 +29,14 @@ AT_CHECK([AT_LIBI86_RUN(hello-lfn.com,"$abs_srcdir")]dnl
 
 AT_CLEANUP
 
+AT_SETUP([[qemu]])
+
+AT_CHECK([AT_LIBI86_RUN_QEMU(hello.com,"$abs_srcdir")]dnl
+,,[[Hello world!
+]],[[ignore]])
+
+AT_CLEANUP
+
 AT_SETUP([[GCC toolchain]])
 
 AT_CHECK([[$CC --version -v]],,[[ignore]],[[ignore]])
@@ -41,6 +49,18 @@ char dawg[] = "dawg";
 int main (void)
 {
   printf("yo %s\n", dawg);
+  return 0;
+}]],[[yo dawg
+]])
+AT_LIBI86_CHECK_QEMU(dnl
+[[#if ! defined __ia16__
+# error
+#endif
+#include <stdio.h>
+char yo[] = "yo";
+int main (void)
+{
+  printf("%s dawg\n", yo);
   return 0;
 }]],[[yo dawg
 ]])

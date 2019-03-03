@@ -16,7 +16,8 @@
 # <http://www.gnu.org/licenses/>.
 
 # Script to postprocess the output of a DOS program presented on stdin (by
-# way of dosemu), and write the postprocessed output to stdout.  This is for
-# comparing against an expected test output.
+# way of dosemu or qemu), and write the postprocessed output to stdout. 
+# This is for comparing against an expected test output.
 
-dos2unix | sed -n -e '1 { /^About to Execute : /! p }' -e '2,$ p'
+dos2unix | dos2unix | \
+  sed -n -e '1 { /^About to Execute : /! { /./ p } }' -e '2,$ p'

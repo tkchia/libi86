@@ -25,6 +25,6 @@ addons:
     sources:
       - sourceline: 'ppa:tkchia/build-ia16'
     packages:
-      - gcc-ia16-elf dos2unix autoconf
+      - gcc-ia16-elf dos2unix autoconf qemu-system-x86 mtools
 install: make -C dosemu-on-travis-ci install
 script: ./tests/travis-build-and-check.sh

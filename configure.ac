@@ -35,6 +35,8 @@ AC_CANONICAL_BUILD
 AC_CANONICAL_HOST
 AC_PROG_CC
 AC_PATH_PROG(DOSEMU, dosemu, /bin/false)
+AC_PATH_PROG(QEMU_X86, qemu-system-i386, /bin/false)
+AC_PATH_PROG(MCOPY, mcopy, /bin/false)
 AC_CONFIG_SUBDIRS([ia16])
 AC_CONFIG_TESTDIR([tests])
 AC_CONFIG_FILES([Makefile tests/atlocal])

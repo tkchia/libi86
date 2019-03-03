@@ -25,6 +25,7 @@ AT_CHECK([[$CC -o ]m4_default($2,a.exe) ]dnl
 [["$abs_top_builddir"/"$at_libi86_multilib"/ia16/libi86.a]],dnl
 ,[[ignore]],[[ignore]])])
 
+dnl Test a program under dosemu.
 dnl $1 = program to run on dosemu (default a.exe)
 dnl $2 = Unix path which $1 resides in (defaults to current directory)
 dnl $3 = options to pass to dosemu (default -dumb >a.log)
@@ -70,6 +71,7 @@ AT_DATA([[expout]],[$2])
 _AT_LIBI86_DO_CHECK_EXPOUT_D(,a.c,,m4_shift(m4_shift($@)))
 _AT_LIBI86_DO_CHECK_EXPOUT_D([[-mcmodel=small]],a.c,,m4_shift(m4_shift($@)))])
 
+dnl Compile an MS-DOS program & test it using dosemu.
 dnl $1 = text of program to test
 dnl $2 = expected program output
 dnl $3 = program to run on dosemu (default a.exe)
@@ -87,6 +89,7 @@ _AT_LIBI86_DO_CHECK_EXPOUT_D([[-mcmodel=small]],a.c,,m4_shift(m4_shift($@)))])
 
 m4_define([AT_LIBI86_CONSOLE_CAPTURE_PROG],["$abs_srcdir"/capture.S])
 
+dnl Compile & test an MS-DOS program whose output goes to the console.
 dnl $1 = text of program to test
 dnl $2 = expected program output on console
 dnl $3 = additional options to pass to dosemu (especially -input ...)
@@ -106,3 +109,59 @@ if errorlevel 1 del a.log
 ]])
 AT_LIBI86_CHECK([$1],[$2],[[x.bat]],[$3 [-t >/dev/null]],dnl
 [["$abs_srcdir"/postproc-console.sh]])])
+
+dnl Test a program under qemu.
+dnl $1 = program to run on qemu (default a.exe)
+dnl $2 = Unix path which $1 resides in (defaults to current directory)
+dnl $3 = options to pass to qemu (default -nographic)
+dnl $4 = Unix program to run to postprocess dosemu output (default
+dnl	 postproc-stdout.sh in this file's source directory)
+m4_define([AT_LIBI86_RUN_QEMU],[dnl
+AT_DATA([[autoexec.bat]],dnl
+[[@echo off
+ctty com1
+call ]m4_default($1,a.exe)[
+echo %ERRORLEVEL%>errlvl.log
+ctty con
+poweroff
+]])][[(
+  rm -f a.log && \
+  cp "$abs_srcdir"/freedos-1.2-clean.img a.img && \
+  $MCOPY -i a.img autoexec.bat ]dnl
+    m4_default($2,.)/m4_default($1,a.exe)[ "$abs_srcdir"/poweroff.com :: && \
+  $QEMU_X86 ]m4_default($3,-nographic)[ -localtime -fda a.img </dev/null \
+    | ]m4_default($4,"$abs_srcdir"/postproc-stdout.sh)[ && \
+  $MCOPY -i a.img -n ::errlvl.log . && \
+  (exit "`tr -d -c 0123456789 <errlvl.log`")
+)]])
+
+m4_define([_AT_LIBI86_DO_CHECK_QEMU_EXPOUT_A],[dnl
+AT_LIBI86_COMPILE($2,$3,$1)
+AT_CHECK([AT_LIBI86_RUN_QEMU($4,,$5,$6)],,[[expout]],[[ignore]])])
+
+m4_define([_AT_LIBI86_DO_CHECK_QEMU_EXPOUT_B],[dnl
+_AT_LIBI86_DO_CHECK_QEMU_EXPOUT_A($@)
+_AT_LIBI86_DO_CHECK_QEMU_EXPOUT_A([[-march=any_186 ]]$@)])
+
+m4_define([_AT_LIBI86_DO_CHECK_QEMU_EXPOUT_C],[dnl
+_AT_LIBI86_DO_CHECK_QEMU_EXPOUT_B([[-O2 ]]$@)
+_AT_LIBI86_DO_CHECK_QEMU_EXPOUT_B([[-Os ]]$@)
+_AT_LIBI86_DO_CHECK_QEMU_EXPOUT_B([[-O2 -fno-omit-frame-pointer ]]$@)])
+
+m4_define([_AT_LIBI86_DO_CHECK_QEMU_EXPOUT_D],[dnl
+_AT_LIBI86_DO_CHECK_QEMU_EXPOUT_C($@)
+_AT_LIBI86_DO_CHECK_QEMU_EXPOUT_C([[-mrtd ]]$@)
+_AT_LIBI86_DO_CHECK_QEMU_EXPOUT_C([[-mregparmcall ]]$@)])
+
+dnl Compile an MS-DOS program & test it using qemu.  This is needed for some
+dnl programs which use x86 features not properly handled on dosemu.
+dnl $1 = text of program to test
+dnl $2 = expected program output
+dnl $3 = program to run on dosemu (default a.exe)
+m4_define([AT_LIBI86_CHECK_QEMU],[dnl
+AT_DATA([[a.c]],[$1
+])
+AT_DATA([[expout]],[$2])
+_AT_LIBI86_DO_CHECK_QEMU_EXPOUT_D(,a.c,,m4_shift(m4_shift($@)))
+_AT_LIBI86_DO_CHECK_QEMU_EXPOUT_D([[-mcmodel=small]],a.c,,dnl
+m4_shift(m4_shift($@)))])

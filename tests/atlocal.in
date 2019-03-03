@@ -15,4 +15,6 @@
 # <http://www.gnu.org/licenses/>.
 
 : ${DOSEMU='@DOSEMU@'}
+: ${QEMU_X86='@QEMU_X86@'}
+: ${MCOPY='@MCOPY@'}
 : ${CC='@CC@'}
