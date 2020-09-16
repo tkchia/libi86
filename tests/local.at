@@ -35,6 +35,7 @@ dnl	  reads within dosemu to return all zeroes, which is not good for
 dnl	  tests that need to capture "screen contents".  Set $TERM to
 dnl	  something more reasonable in this case.
 m4_define([AT_LIBI86_RUN],[[( \
+  export li86_cv_dosemu_is_1 && \
   if test x = x"$TERM" -o xdumb = x"$TERM"; then \
     TERM=vt220 && LINES=25 && COLUMNS=80 && export TERM LINES COLUMNS; \
   fi && \

@@ -6,6 +6,8 @@ An attempt to reimplement non-standard C library facilities (e.g. `<conio.h>`) c
 
 The current aim is to be compatible enough with the [Open Watcom](https://github.com/open-watcom/open-watcom-v2/) runtime — as described in the [_Open Watcom C Library Reference_](https://github.com/open-watcom/open-watcom-v2-wikidocs/blob/master/docs/clib.pdf) — to be useful for building existing MS-DOS code.
 
+Defining the macro `_BORLANDC_SOURCE` will also enable some degree of compatibility with the [Borland Turbo C++](http://cc.embarcadero.com/Item/25636) compiler's C library.
+
 ## Synopsis
 
 #### Use
@@ -44,6 +46,11 @@ In addition, the test setup and test cases (under [`tests/`](tests/)) are distri
 
 ## Implemented functions
 
+Legend:
+
+  * <sup>[BC]</sup> from Borland Turbo C++ — enable with `_BORLANDC_SOURCE`
+  * <sup>[X]</sup> `libi86`-specific extension; not in Open Watcom or Borland C++
+
 ### `<bios.h>`
 
   * `_bios_disk (`_service_`,` \*_diskinfo_`);`
@@ -52,8 +59,8 @@ In addition, the test setup and test cases (under [`tests/`](tests/)) are distri
   * `_bios_memsize ();`
   * `_bios_keybrd (`_service_`);`
   * `_bios_timeofday (`_service_`,` \*_timeval_`);`
-  * `_bios_joystick (`_service_`,` \*_joyinfo_`);`
-    - not in Open Watcom; reads joystick status via `int 0x15` function `0x84`
+  * <sup>[X]</sup> `_bios_joystick (`_service_`,` \*_joyinfo_`);`
+    - reads joystick status via `int 0x15` function `0x84`
 
 ### `<conio.h>`
 
@@ -69,13 +76,13 @@ In addition, the test setup and test cases (under [`tests/`](tests/)) are distri
   * `vcprintf (`\*_fmt_`,` _ap_`);`
   * `vcscanf (`\*_fmt_`,` _ap_`);`
   * `inp (`_port_`);`
-    - also `_inp`
+    - also `_inp`, <sup>[BC]</sup> `inportb`
   * `inpw (`_port_`);`
-    - also `_inpw`
+    - also `_inpw`, <sup>[BC]</sup> `inportw`
   * `outp (`_port_`,` _value_`);`
-    - also `_outp`
+    - also `_outp`, <sup>[BC]</sup> `outportb`
   * `outpw (`_port_`,` _value_`);`
-    - also `_outpw`
+    - also `_outpw`, <sup>[BC]</sup> `outportw`
 
 ### `<dos.h>`
 
@@ -109,12 +116,12 @@ In addition, the test setup and test cases (under [`tests/`](tests/)) are distri
   * `int86 (`_inter-no_`,` \*_in-regs_`,` \*_out-regs_`);`
   * `int86x (`_inter-no_`,` \*_in-regs_`,` \*_out-regs_`,` \*_seg-regs_`);`
   * `intr (`_inter-no_`,` \*_regs_`);`
-  * `_int86f (`_inter-no_`,` \*_in-regs_`,` \*_out-regs_`);`
-    - extension --- loads flags
-  * `_int86xf (`_inter-no_`,` \*_in-regs_`,` \*_out-regs_`,` \*_seg-regs_`);`
-    - extension --- loads flags
-  * `_intrf (`_inter-no_`,` \*_regs_`);`
-    - extension --- loads flags
+  * <sup>[X]</sup> `_int86f (`_inter-no_`,` \*_in-regs_`,` \*_out-regs_`);`
+    - loads `SZAPC` flags before issuing interrupt
+  * <sup>[X]</sup> `_int86xf (`_inter-no_`,` \*_in-regs_`,` \*_out-regs_`,` \*_seg-regs_`);`
+    - loads `SZAPC` flags before issuing interrupt
+  * <sup>[X]</sup> `_intrf (`_inter-no_`,` \*_regs_`);`
+    - loads `SZAPC` flags before issuing interrupt
   * `FP_OFF (`\*_ptr_`);`
     - macro; also `_FP_OFF`
   * `FP_SEG (`\*_ptr_`);`

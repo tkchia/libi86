@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018--2019 TK Chia
+ * Copyright (c) 2018--2020 TK Chia
  *
  * This file is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -26,9 +26,11 @@
 	.global	__libi86_outpw
 	.weak	outpw
 	.weak	_outpw
+	.weak	outportw
 __libi86_outpw:
 outpw:
 _outpw:
+outportw:
 	ENTER_BX_(4)
 #ifndef __IA16_CALLCVT_REGPARMCALL
 	MOV_ARG0W_BX_(%dx)

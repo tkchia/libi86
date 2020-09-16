@@ -1,5 +1,5 @@
 #!/bin/sh
-# Copyright (c) 2018 TK Chia
+# Copyright (c) 2018--2020 TK Chia
 #
 # This file is free software; you can redistribute it and/or modify it
 # under the terms of the GNU Lesser General Public License as published by
@@ -19,4 +19,12 @@
 # way of dosemu), and write the postprocessed output to stdout.  This is for
 # comparing against an expected test output.
 
-dos2unix | sed -n -e '1 { /^About to Execute : /! p }' -e '2,$ p'
+if test yes = "$li86_cv_dosemu_is_1"; then \
+  dos2unix
+else
+  # As of writing, dosemu2 either blithely ignores the -quiet flag or only
+  # partially honours it.  -- tkchia 20200916
+  dos2unix | awk 'BEGIN	{ p = 0 }
+			{ if (p) print }
+		  /^About to Execute : / { p = 1 }'
+fi

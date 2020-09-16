@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 TK Chia
+ * Copyright (c) 2018--2020 TK Chia
  *
  * This file is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -75,6 +75,14 @@ _LIBI86_REDIRECT_AND_INLINE_2 (unsigned, outpw, unsigned, unsigned,
 			       __libi86_outpw)
 _LIBI86_REDIRECT_AND_INLINE_2 (unsigned, _outpw, unsigned, unsigned,
 			       __libi86_outpw)
+# ifdef _BORLANDC_SOURCE
+_LIBI86_REDIRECT_AND_INLINE_1 (unsigned, inportb, unsigned, __libi86_inp)
+_LIBI86_REDIRECT_AND_INLINE_1 (unsigned, inportw, unsigned, __libi86_inpw)
+_LIBI86_REDIRECT_AND_INLINE_2 (unsigned, outportb, unsigned, unsigned,
+			       __libi86_outp)
+_LIBI86_REDIRECT_AND_INLINE_2 (unsigned, outportw, unsigned, unsigned,
+			       __libi86_outpw)
+# endif
 #endif
 
 _LIBI86_END_EXTERN_C

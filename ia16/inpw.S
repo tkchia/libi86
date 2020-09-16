@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018--2019 TK Chia
+ * Copyright (c) 2018--2020 TK Chia
  *
  * This file is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -26,9 +26,11 @@
 	.global	__libi86_inpw
 	.weak	inpw
 	.weak	_inpw
+	.weak	inportw
 __libi86_inpw:
 inpw:
 _inpw:
+inportw:
 	ENTER_BX_(2)
 	MOV_ARG0W_BX_CLOBBER_(%dx)
 	inw	%dx,	%ax
