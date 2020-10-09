@@ -25,7 +25,12 @@ before_script:
   - >
       add-apt-repository -y ppa:tkchia/build-ia16 ||
       apt-key add tests/ppa-pub-key.gpg.bin
+  - >
+      add-apt-repository -y ppa:tkchia/de-rebus ||
+      apt-key add tests/ppa-pub-key.gpg.bin
   - apt-get update -y
-  - apt-get install -y gcc-ia16-elf dosemu dos2unix autoconf make bsdutils
+  - >
+      apt-get install -y gcc-ia16-elf dosemu2-legacy dos2unix autoconf make
+      bsdutils
 test:
   script: ./tests/travis-build-and-check.sh
